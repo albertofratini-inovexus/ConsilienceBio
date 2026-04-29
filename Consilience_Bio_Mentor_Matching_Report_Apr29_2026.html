@@ -1,0 +1,1614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Consilience Bio — Mentor Matching Report | Inovexus</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap');
+
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'DM Sans',sans-serif;line-height:1.6;color:#1a1a2e;background:#f0f4f8}
+.container{max-width:1440px;margin:0 auto;background:#fff;box-shadow:0 0 40px rgba(0,0,0,0.12)}
+
+/* HEADER */
+header{background:linear-gradient(135deg,#0a1628 0%,#0d2b4e 50%,#102e52 100%);color:#fff;padding:3rem 2.5rem;position:relative;overflow:hidden}
+header::before{content:'';position:absolute;top:-60px;right:-60px;width:320px;height:320px;border-radius:50%;background:rgba(0,188,168,0.08);pointer-events:none}
+header::after{content:'';position:absolute;bottom:-80px;left:-40px;width:260px;height:260px;border-radius:50%;background:rgba(41,182,246,0.1);pointer-events:none}
+.dna-decoration{position:absolute;top:20px;right:80px;opacity:0.06;font-size:8rem;pointer-events:none}
+.header-inner{position:relative;z-index:1}
+.header-badge{display:inline-block;background:rgba(0,188,168,0.2);border:1px solid rgba(0,188,168,0.5);color:#4dd0c4;font-size:0.78rem;font-weight:700;letter-spacing:2px;padding:4px 14px;border-radius:20px;margin-bottom:1rem;text-transform:uppercase}
+header h1{font-family:'DM Serif Display',serif;font-size:2.9rem;font-weight:400;letter-spacing:-0.5px;margin-bottom:0.3rem}
+header h1 strong{font-style:italic;color:#4dd0c4}
+.header-sub{font-size:1.1rem;opacity:0.82;margin-bottom:1.5rem}
+.header-meta{display:flex;gap:2.5rem;font-size:0.88rem;opacity:0.7;border-top:1px solid rgba(255,255,255,0.12);padding-top:1rem;flex-wrap:wrap}
+.header-meta span{display:flex;align-items:center;gap:6px}
+
+/* NAV */
+.sticky-nav{position:sticky;top:0;z-index:100;background:linear-gradient(135deg,#0a1628,#102e52);display:flex;gap:0;border-bottom:2px solid rgba(0,188,168,0.3);overflow-x:auto}
+.nav-link{padding:0.8rem 1.5rem;color:rgba(255,255,255,0.75);text-decoration:none;font-size:0.82rem;font-weight:600;letter-spacing:0.5px;text-transform:uppercase;border-right:1px solid rgba(255,255,255,0.1);transition:all 0.2s;white-space:nowrap}
+.nav-link:hover{background:rgba(0,188,168,0.15);color:#4dd0c4}
+
+/* KPI BAR */
+.kpi-bar{display:grid;grid-template-columns:repeat(4,1fr);gap:0;background:linear-gradient(135deg,#0a1628,#102e52)}
+.kpi-btn{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:1.8rem 1rem;text-decoration:none;color:#fff;border-right:1px solid rgba(255,255,255,0.1);transition:all 0.3s;cursor:pointer;background:transparent;border-top:none;border-bottom:none;border-left:none;font-family:inherit}
+.kpi-btn:last-child{border-right:none}
+.kpi-btn:hover{background:rgba(0,188,168,0.15)}
+.kpi-num{font-family:'DM Serif Display',serif;font-size:2.8rem;font-weight:400;color:#4dd0c4;line-height:1}
+.kpi-label{font-size:0.78rem;opacity:0.75;margin-top:0.3rem;text-transform:uppercase;letter-spacing:1.2px;text-align:center}
+.kpi-sub{font-size:0.7rem;opacity:0.45;margin-top:0.2rem;text-align:center}
+
+/* CONFIDENCE BANNER */
+.confidence-banner{background:linear-gradient(135deg,#0a1628 0%,#0d3259 100%);color:#fff;padding:2rem 2.5rem;display:flex;align-items:center;gap:2rem;border-bottom:3px solid rgba(0,188,168,0.4)}
+.conf-left{flex:1}
+.conf-left h3{font-family:'DM Serif Display',serif;font-size:1.25rem;color:#4dd0c4;margin-bottom:0.5rem}
+.conf-left p{font-size:0.88rem;opacity:0.78;line-height:1.65;max-width:820px}
+.conf-score-block{text-align:center;background:rgba(0,188,168,0.12);border:2px solid rgba(0,188,168,0.4);border-radius:16px;padding:1.2rem 2rem;min-width:140px}
+.conf-score-num{font-family:'DM Serif Display',serif;font-size:3.5rem;color:#4dd0c4;line-height:1}
+.conf-score-label{font-size:1.1rem;opacity:0.6;color:#fff}
+.conf-score-sub{font-size:0.75rem;opacity:0.5;color:#4dd0c4;margin-top:4px}
+
+/* SECTIONS */
+.section{padding:2.5rem}
+.section-alt{background:#f8fafc}
+.section-header{margin-bottom:1.8rem}
+.section-header h2{font-family:'DM Serif Display',serif;font-size:1.8rem;color:#0a1628;margin-bottom:0.3rem}
+.section-header p{color:#546e8a;font-size:0.92rem}
+.section-tag{display:inline-block;background:#e0f7f4;color:#00796b;font-size:0.7rem;font-weight:700;letter-spacing:1.5px;padding:3px 10px;border-radius:20px;text-transform:uppercase;margin-bottom:0.6rem}
+
+/* PROFILE GRID */
+.profile-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem}
+.profile-card{background:#fff;border:1px solid #e1e8f0;border-radius:12px;padding:1.2rem 1.4rem;border-top:3px solid #4dd0c4}
+.profile-card h4{font-size:0.75rem;text-transform:uppercase;letter-spacing:1px;color:#94a3b8;margin-bottom:0.4rem}
+.profile-card p{font-size:0.9rem;color:#1a1a2e;font-weight:500;line-height:1.5}
+
+/* MENTORING AREAS */
+.areas-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem}
+.area-card{background:#fff;border-radius:16px;border:1px solid #e1e8f0;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,0.05)}
+.area-header{padding:1.2rem 1.4rem 1rem;display:flex;align-items:flex-start;gap:1rem}
+.area-icon{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0}
+.area-icon-1{background:#e0f7f4;color:#00796b}
+.area-icon-2{background:#e3f2fd;color:#1565c0}
+.area-icon-3{background:#fff3e0;color:#e65100}
+.area-title{font-weight:700;font-size:0.95rem;color:#0a1628;margin-bottom:0.2rem}
+.area-obj{font-size:0.82rem;color:#546e8a;line-height:1.5}
+.area-kpi{background:#f8fafc;border-top:1px solid #e1e8f0;padding:1rem 1.4rem;display:flex;align-items:center;gap:0.5rem}
+.area-kpi-label{font-size:0.7rem;text-transform:uppercase;letter-spacing:1px;color:#94a3b8;font-weight:600}
+.area-kpi-value{font-size:0.85rem;font-weight:600;color:#0a1628}
+.area-rationale{padding:0 1.4rem 1.2rem;font-size:0.82rem;color:#546e8a;line-height:1.6;font-style:italic}
+
+/* MENTOR GRID */
+.mentor-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem}
+.mentor-card{background:#fff;border:1px solid #e1e8f0;border-radius:14px;overflow:hidden;transition:transform 0.2s,box-shadow 0.2s;box-shadow:0 2px 8px rgba(0,0,0,0.04)}
+.mentor-card:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,0.1)}
+.mentor-card-top{padding:1.2rem 1.2rem 0}
+.mentor-header{display:flex;align-items:flex-start;gap:0.8rem;margin-bottom:0.8rem}
+.mentor-avatar{width:46px;height:46px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.15rem;font-weight:700;flex-shrink:0;font-family:'DM Serif Display',serif}
+.av-teal{background:#e0f7f4;color:#00796b}
+.av-blue{background:#e3f2fd;color:#1565c0}
+.av-orange{background:#fff3e0;color:#e65100}
+.av-purple{background:#f3e5f5;color:#6a1b9a}
+.av-green{background:#e8f5e9;color:#2e7d32}
+.av-red{background:#fce4ec;color:#c62828}
+.mentor-name{font-weight:700;font-size:0.95rem;color:#0a1628;line-height:1.2}
+.mentor-location{font-size:0.78rem;color:#94a3b8;margin-top:1px}
+.scores-row{display:flex;gap:0.5rem;margin-bottom:0.8rem}
+.score-pill{padding:3px 10px;border-radius:20px;font-size:0.78rem;font-weight:700}
+.score-dmf{background:#e0f7f4;color:#00695c}
+.score-conf{background:#e3f2fd;color:#0d47a1}
+.mentor-area-badge{display:inline-block;background:#fff3e0;color:#e65100;font-size:0.68rem;padding:2px 9px;border-radius:8px;font-weight:600;letter-spacing:0.5px;margin-bottom:0.6rem}
+.mentor-rationale{background:#f8fafc;border-left:3px solid #4dd0c4;margin:0 1.2rem 1rem;padding:0.7rem 1rem;border-radius:0 8px 8px 0;font-size:0.84rem;color:#334155;line-height:1.55}
+.tags-area{padding:0 1.2rem 1.2rem;display:flex;flex-direction:column;gap:0.5rem}
+.tag-row{display:flex;align-items:flex-start;gap:6px;flex-wrap:wrap}
+.tag-row-label{font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:#94a3b8;white-space:nowrap;padding-top:3px;min-width:65px}
+.tag{display:inline-block;font-size:0.7rem;padding:2px 8px;border-radius:10px;font-weight:600}
+.tag-sector{background:#e1f5fe;color:#0277bd}
+.tag-skill{background:#f0f9f0;color:#1e7e44}
+.tag-geo{background:#fff8e1;color:#a8591a}
+.linkedin-link{display:block;padding:0.7rem 1.2rem;background:#f8fafc;color:#0288d1;text-decoration:none;font-size:0.79rem;font-weight:600;border-top:1px solid #e1e8f0;transition:background 0.2s}
+.linkedin-link:hover{background:#e1f5fe}
+
+/* TOP MENTOR BADGE */
+.top-badge{position:absolute;top:12px;right:12px;background:linear-gradient(135deg,#ffd700,#ffb300);color:#5c3d00;font-size:0.65rem;font-weight:800;letter-spacing:1px;padding:3px 8px;border-radius:8px;text-transform:uppercase}
+.card-relative{position:relative}
+.top-card{border-top:3px solid #ffd700}
+.qualified-card{border-top:3px solid #4dd0c4}
+
+/* DASHBOARD */
+.dashboard-section{padding:2.5rem;background:#f8fafc;border-top:3px solid #e1e8f0}
+.charts-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-bottom:1.5rem}
+.chart-card{background:#fff;border-radius:12px;padding:1.5rem;border:1px solid #e1e8f0;box-shadow:0 2px 8px rgba(0,0,0,0.04)}
+.chart-title{font-size:0.88rem;font-weight:700;color:#0a1628;margin-bottom:1rem;padding-bottom:8px;border-bottom:2px solid #e0f7f4}
+.chart-wide{grid-column:span 3}
+canvas{max-height:240px}
+.chart-wide canvas{max-height:300px}
+
+/* FOOTER */
+footer{background:#0a1628;color:rgba(255,255,255,0.6);padding:2rem 2.5rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem}
+footer .footer-brand{font-family:'DM Serif Display',serif;font-size:1.2rem;color:#4dd0c4}
+footer .footer-info{font-size:0.82rem}
+
+/* SUBSECTION DIVIDER */
+.subsection-label{font-family:'DM Serif Display',serif;font-size:1.25rem;color:#0a1628;margin-bottom:1.2rem;margin-top:2rem;padding-bottom:0.5rem;border-bottom:2px solid #e0f7f4;display:flex;align-items:center;gap:0.5rem}
+
+@media(max-width:900px){
+  .profile-grid,.mentor-grid,.charts-grid,.areas-grid{grid-template-columns:1fr}
+  .chart-wide{grid-column:span 1}
+  .kpi-bar{grid-template-columns:repeat(2,1fr)}
+  header h1{font-size:2rem}
+  .confidence-banner{flex-direction:column}
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+<!-- HEADER -->
+<header>
+  <div class="dna-decoration">🧬</div>
+  <div class="header-inner">
+    <div class="header-badge">Inovexus · Mentor Matching · AI Analysis</div>
+    <h1>Consilience Bio — <strong>Mentor Matching Report</strong></h1>
+    <div class="header-sub">AI-native multi-omics data infrastructure · Full scoring of 505 Inovexus mentor profiles · Seed Cohort 2026</div>
+    <div class="header-meta">
+      <span>📅 April 29, 2026</span>
+      <span>🧬 Life Sciences AI / Multi-Omics SaaS</span>
+      <span>🇫🇷 France → 🇺🇸 US (Boston, SF, San Diego)</span>
+      <span>🎯 Seed · €2.5M · BPI France lead</span>
+      <span>👤 Analysis: Inovexus Investment Committee</span>
+    </div>
+  </div>
+</header>
+
+<!-- STICKY NAV -->
+<nav class="sticky-nav">
+  <a href="#profile" class="nav-link">🏢 Startup Profile</a>
+  <a href="#mentoring-areas" class="nav-link">🎯 Mentoring Areas & KPIs</a>
+  <a href="#top-mentors" class="nav-link">⭐ Top Mentors</a>
+  <a href="#qualified-mentors" class="nav-link">✅ Qualified Mentors</a>
+  <a href="#dashboard" class="nav-link">📊 Dashboard</a>
+</nav>
+
+<!-- KPI BAR -->
+<div class="kpi-bar">
+  <button class="kpi-btn" onclick="document.getElementById('top-mentors').scrollIntoView({behavior:'smooth'})">
+    <div class="kpi-num">10</div>
+    <div class="kpi-label">Top Mentors</div>
+    <div class="kpi-sub">DMF Score ≥ 8.5</div>
+  </button>
+  <button class="kpi-btn" onclick="document.getElementById('qualified-mentors').scrollIntoView({behavior:'smooth'})">
+    <div class="kpi-num">49</div>
+    <div class="kpi-label">Qualified Mentors</div>
+    <div class="kpi-sub">DMF Score 7.0–8.4</div>
+  </button>
+  <button class="kpi-btn" onclick="document.getElementById('dashboard').scrollIntoView({behavior:'smooth'})">
+    <div class="kpi-num">11.7%</div>
+    <div class="kpi-label">Match Rate</div>
+    <div class="kpi-sub">59 of 505 mentors</div>
+  </button>
+  <button class="kpi-btn" onclick="document.getElementById('dashboard').scrollIntoView({behavior:'smooth'})">
+    <div class="kpi-num">78</div>
+    <div class="kpi-label">Global Confidence</div>
+    <div class="kpi-sub">Score out of 100</div>
+  </button>
+</div>
+
+<!-- CONFIDENCE BANNER -->
+<div class="confidence-banner">
+  <div class="conf-left">
+    <h3>Global Mentor Confidence Score — 78 / 100</h3>
+    <p>Consilience Bio operates at the intersection of life sciences, AI infrastructure, and enterprise SaaS — a highly specialized niche. The Inovexus mentor base offers strong BioTech/Pharma domain coverage (10+ dedicated profiles), solid AI/Data engineering depth, and meaningful US-EU network reach. The score reflects excellent sector fit for the food/cosmetics secondary market (Reindert Dekker, Sophie Buresi via LVMH/Pernot Ricard, Delphine Bensimon at L'Oréal — a direct design partner), strong fundraising/Series A mentors (Eric Dutang, Dinis Daniel dos Santos, Vincent Lepreux), and IP/patent protection for the synthetic data layer (Franck Tetaz). The primary gap reducing the score below 85 is limited depth of mentors with direct multi-omics or bioinformatics commercialization experience in the US biotech market — the company's single most critical GTM channel. Score normalized to 7.8/10 for benchmark comparison.</p>
+  </div>
+  <div class="conf-score-block">
+    <div class="conf-score-num">78</div>
+    <div class="conf-score-label">/ 100</div>
+    <div class="conf-score-sub">= 7.8 / 10 normalized</div>
+  </div>
+</div>
+
+<!-- STARTUP PROFILE -->
+<section id="profile" class="section section-alt">
+  <div class="section-header">
+    <div class="section-tag">Ground Truth</div>
+    <h2>Startup Profile — Consilience Bio</h2>
+    <p>Extracted from investment memo, call transcripts (Apr 7 & Apr 8, 2026), and company website. This profile is the single source of truth for mentor scoring.</p>
+  </div>
+  <div class="profile-grid">
+    <div class="profile-card">
+      <h4>Sector & Sub-sector</h4>
+      <p>AI-native data infrastructure for multimodal biology (multi-omics). Computational biology SaaS. Life Sciences / BioTech.</p>
+    </div>
+    <div class="profile-card">
+      <h4>Stage & Round</h4>
+      <p>Pre-revenue seed. Raising €2.5M. BPI France Digital Venture III signed term sheet as lead (€1M). ~50% committed. Target close: May–June 2026.</p>
+    </div>
+    <div class="profile-card">
+      <h4>Business Model</h4>
+      <p>B2B SaaS. ~$75K ACV initial. API/SDK/CLI integration (no data migration required). Annual subscription. Projected 90% renewal rate.</p>
+    </div>
+    <div class="profile-card">
+      <h4>Value Proposition</h4>
+      <p>Replace €80–130K consulting engagements with a $75K SaaS license. Compress months of specialist work into hours. 4–6× ROI narrative for biotech/pharma procurement teams.</p>
+    </div>
+    <div class="profile-card">
+      <h4>Technology</h4>
+      <p>3 pillars: Harmonize (LLM-driven metadata & ontology normalization), Integrate (AI-agent orchestrated multi-omics pipelines), Augment (synthetic data generation via digital twin models — POC stage, no direct competitor).</p>
+    </div>
+    <div class="profile-card">
+      <h4>Target Customers</h4>
+      <p>Primary: US biotech/techbio (Boston + California clusters, 1,200 addressable). Secondary: European cosmetics/food/agro corporates (L'Oréal, Nestlé, Lesaffre, Lallemand). Tertiary: Pharma R&D teams.</p>
+    </div>
+    <div class="profile-card">
+      <h4>Team</h4>
+      <p>Hocine Lourdani (CEO, PharmD/MBA, Silicon Valley AI product); Marc Chadeau-Hyam (CSO, Imperial College London, world-leading omics ML); Sébastien Marque (CBO, 3 exits incl. 2× IQVIA, 25 yrs enterprise sales); Mario Cornejo (CTO, 2× founder); Pascale Rondeau (CCO, former Danone).</p>
+    </div>
+    <div class="profile-card">
+      <h4>Geographic Focus</h4>
+      <p>50% US (Boston, SF/San Diego), 25% Europe (France, Germany, UK), 25% Asia (not near-term priority). Sébastien based US with French visa; Hocine between Paris & SF; team hub in Paris.</p>
+    </div>
+    <div class="profile-card">
+      <h4>Key Milestones</h4>
+      <p>MVP launch H2 2026; $500K ARR 2026; $2M+ ARR 2027; Series A (€17M+) H1 2028. Design partners: L'Oréal, UCSF, Santa Ana Bio, Lesaffre, Lallemand. Published: Nature Scientific Reports, SCiX 2025.</p>
+    </div>
+  </div>
+</section>
+
+<!-- MENTORING AREAS -->
+<section id="mentoring-areas" class="section">
+  <div class="section-header">
+    <div class="section-tag">Mentoring Plan</div>
+    <h2>Mentoring Areas & KPIs</h2>
+    <p>3 priority areas extracted from call transcripts (highest signal), cross-validated with investment memo. Each area addresses a specific, documented bottleneck with a trackable 6-month KPI.</p>
+  </div>
+  <div class="areas-grid">
+    <div class="area-card">
+      <div class="area-header">
+        <div class="area-icon area-icon-1">🎯</div>
+        <div>
+          <div class="area-title">Enterprise Sales & GTM — Life Sciences</div>
+          <div class="area-obj"><strong>Objective:</strong> Build an outbound enterprise sales engine targeting US biotech clusters (Boston + SF/San Diego) with Sébastien as primary commercial lead, converting design-partner relationships to first paying customers by Q4 2026.</div>
+        </div>
+      </div>
+      <div class="area-rationale">Critical bottleneck confirmed in both call transcripts: "we're only at intent-based traction; first sales entirely dependent on Sébastien's network." Zero sales hire planned until late 2027. The $500K ARR target for 2026 requires closing enterprise clients within ~3 months of seed — an extremely aggressive timeline for a technical product requiring scientific validation before purchase.</div>
+      <div class="area-kpi">
+        <span class="area-kpi-label">KPI 6M:</span>
+        <span class="area-kpi-value">≥ 3 signed SaaS contracts by Q4 2026 ($75K ACV → $225K ARR min.)</span>
+      </div>
+    </div>
+    <div class="area-card">
+      <div class="area-header">
+        <div class="area-icon area-icon-2">🧬</div>
+        <div>
+          <div class="area-title">Product Development — AI/Data SaaS for Scientists</div>
+          <div class="area-obj"><strong>Objective:</strong> Define and execute the product roadmap for the Harmonize + Integrate MVP, building a platform that scientific/technical buyers (bioinformaticians, data engineers in pharma/biotech) can adopt incrementally via API/SDK/CLI without data migration.</div>
+        </div>
+      </div>
+      <div class="area-rationale">Confirmed in investment memo: MVP must be market-ready by H2 2026 with the first two platform pillars (Harmonize + Integrate) production-grade. The synthetic data layer (Augment) is a POC — product roadmap prioritization is critical. Technical buyers require peer-level engagement; product UX for scientists is distinct from typical B2B SaaS.</div>
+      <div class="area-kpi">
+        <span class="area-kpi-label">KPI 6M:</span>
+        <span class="area-kpi-value">Harmonize + Integrate MVP delivered and live with ≥ 2 active design partner pilots by H2 2026</span>
+      </div>
+    </div>
+    <div class="area-card">
+      <div class="area-header">
+        <div class="area-icon area-icon-3">🚀</div>
+        <div>
+          <div class="area-title">Strategic Partnerships & Series A Positioning</div>
+          <div class="area-obj"><strong>Objective:</strong> Build a pipeline of strategic partnerships with instrument vendors (sequencing OEMs), academic consortia, and pharma/cosmetics corporates; and prepare the investment narrative and metrics package for a €17M+ Series A by H1 2028.</div>
+        </div>
+      </div>
+      <div class="area-rationale">Identified in both call and memo: "we need investors who go beyond money and make introductions." Series A dependency is structural — €885K cash by mid-2027 before the planned injection. Sébastien explicitly needs introductions through existing portfolio and investor networks to access US biotech decision-makers. Partnership with Bioptimus (potential) and sequencing OEM integrations are stated commercial multipliers.</div>
+      <div class="area-kpi">
+        <span class="area-kpi-label">KPI 6M:</span>
+        <span class="area-kpi-value">≥ 2 partnership MOUs signed + Series A data room ready with €500K ARR evidence</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TOP MENTORS -->
+<section id="top-mentors" class="section section-alt">
+  <div class="section-header">
+    <div class="section-tag">Elite Selection</div>
+    <h2>⭐ Top Mentors — DMF Score ≥ 8.5</h2>
+    <p>10 mentors with highest alignment to Consilience Bio's sector, bottlenecks, and geographic needs. Scoring is notes-first with CSV validation.</p>
+  </div>
+  <div class="mentor-grid">
+
+    <!-- 1. Marco Dotto -->
+    <div class="mentor-card card-relative top-card">
+      <div class="top-badge">⭐ Top</div>
+      <div class="mentor-card-top">
+        <div class="mentor-header">
+          <div class="mentor-avatar av-teal">MD</div>
+          <div>
+            <div class="mentor-name">Marco Dotto</div>
+            <div class="mentor-location">📍 Treviso, Italy</div>
+          </div>
+        </div>
+        <div class="scores-row">
+          <span class="score-pill score-dmf">DMF 9.2</span>
+          <span class="score-pill score-conf">Conf 9.0</span>
+        </div>
+        <div class="mentor-area-badge">🧬 Product Dev · Strategic Partnerships</div>
+      </div>
+      <div class="mentor-rationale">4× founder, 5× CEO/COO, 16+ years in genomics, life sciences, longevity biotech and healthcare. LP in HealthTech/BioTech funds (Unruly Capital, Moonstone VC, Eden Venture). Deep in precision medicine, Biotech R&amp;D, and healthcare data analytics — a near-perfect sector mirror for Consilience Bio. Can open VC doors for Series A prep.</div>
+      <div class="tags-area">
+        <div class="tag-row"><span class="tag-row-label">Sector</span><span class="tag tag-sector">Genomics</span><span class="tag tag-sector">BioTech R&amp;D</span><span class="tag tag-sector">Life Sciences</span><span class="tag tag-sector">Healthcare Data</span></div>
+        <div class="tag-row"><span class="tag-row-label">Skills</span><span class="tag tag-skill">Founder DNA</span><span class="tag tag-skill">VC LP Network</span><span class="tag tag-skill">General Management</span><span class="tag tag-skill">BioTech GTM</span></div>
+        <div class="tag-row"><span class="tag-row-label">Geo</span><span class="tag tag-geo">Italy</span><span class="tag tag-geo">Europe</span></div>
+      </div>
+      <a href="https://www.linkedin.com/in/dottomarco" target="_blank" class="linkedin-link">🔗 linkedin.com/in/dottomarco</a>
+    </div>
+
+    <!-- 2. Hélène Thibieroz -->
+    <div class="mentor-card card-relative top-card">
+      <div class="top-badge">⭐ Top</div>
+      <div class="mentor-card-top">
+        <div class="mentor-header">
+          <div class="mentor-avatar av-blue">HT</div>
+          <div>
+            <div class="mentor-name">Hélène Thibieroz</div>
+            <div class="mentor-location">📍 SF Bay Area, United States</div>
+          </div>
+        </div>
+        <div class="scores-row">
+          <span class="score-pill score-dmf">DMF 8.9</span>
+          <span class="score-pill score-conf">Conf 8.7</span>
+        </div>
+        <div class="mentor-area-badge">🎯 Enterprise Sales · Partnerships</div>
+      </div>
+      <div class="mentor-rationale">Board director/mentor at HAX, Dassault 3DS, Samsung XTC, Silicon Catalyst accelerators. BioTech & Pharma expertise. Founded "We Grow Green" for startup GTM. Builds EU→California startup pipelines — exactly the channel Consilience Bio needs. Based in SF Bay Area with a BioTech & Pharma/Agriculture focus. Among the most valuable US network connectors in the mentor pool.</div>
+      <div class="tags-area">
+        <div class="tag-row"><span class="tag-row-label">Sector</span><span class="tag tag-sector">BioTech & Pharma</span><span class="tag tag-sector">AgriTech</span><span class="tag tag-sector">Energy/Climate</span></div>
+        <div class="tag-row"><span class="tag-row-label">Skills</span><span class="tag tag-skill">GTM US</span><span class="tag tag-skill">Partnerships</span><span class="tag tag-skill">EU→US Bridge</span><span class="tag tag-skill">Accelerator Mentor</span></div>
+        <div class="tag-row"><span class="tag-row-label">Geo</span><span class="tag tag-geo">USA (SF)</span><span class="tag tag-geo">France</span></div>
+      </div>
+      <a href="https://linkedin.com/in/heleneofoz" target="_blank" class="linkedin-link">🔗 linkedin.com/in/heleneofoz</a>
+    </div>
+
+    <!-- 3. Dinis Daniel dos Santos -->
+    <div class="mentor-card card-relative top-card">
+      <div class="top-badge">⭐ Top</div>
+      <div class="mentor-card-top">
+        <div class="mentor-header">
+          <div class="mentor-avatar av-green">DD</div>
+          <div>
+            <div class="mentor-name">Dinis Daniel dos Santos</div>
+            <div class="mentor-location">📍 Basel, Switzerland</div>
+          </div>
+        </div>
+        <div class="scores-row">
+          <span class="score-pill score-dmf">DMF 8.8</span>
+          <span class="score-pill score-conf">Conf 8.8</span>
+        </div>
+        <div class="mentor-area-badge">🚀 Series A Positioning · Partnerships</div>
+      </div>
+      <div class="mentor-rationale">Director at EY-Parthenon advising Life Sciences and MedTech clients exclusively. Active angel in 5 MedTech/HealthTech digitalization startups. Currently raising €5M for Apxora — a SaaS ecosystem for scientific and medical data — placing him in near-identical territory to Consilience Bio. This makes him uniquely positioned to open doors, validate commercial strategy, and stress-test the VC narrative.</div>
+      <div class="tags-area">
+        <div class="tag-row"><span class="tag-row-label">Sector</span><span class="tag tag-sector">Life Sciences</span><span class="tag tag-sector">MedTech</span><span class="tag tag-sector">Scientific SaaS</span></div>
+        <div class="tag-row"><span class="tag-row-label">Skills</span><span class="tag tag-skill">Strategy Consulting</span><span class="tag tag-skill">Angel Investing</span><span class="tag tag-skill">HealthTech M&amp;A</span><span class="tag tag-skill">Fundraising</span></div>
+        <div class="tag-row"><span class="tag-row-label">Geo</span><span class="tag tag-geo">Switzerland</span><span class="tag tag-geo">Europe</span></div>
+      </div>
+      <a href="https://www.linkedin.com/in/dinissantos" target="_blank" class="linkedin-link">🔗 linkedin.com/in/dinissantos</a>
+    </div>
+
+    <!-- 4. Jeff Galecke -->
+    <div class="mentor-card card-relative top-card">
+      <div class="top-badge">⭐ Top</div>
+      <div class="mentor-card-top">
+        <div class="mentor-header">
+          <div class="mentor-avatar av-purple">JG</div>
+          <div>
+            <div class="mentor-name">Jeff Galecke</div>
+            <div class="mentor-location">📍 Lisbon, Portugal</div>
+          </div>
+        </div>
+        <div class="scores-row">
+          <span class="score-pill score-dmf">DMF 8.8</span>
+          <span class="score-pill score-conf">Conf 8.5</span>
+        </div>
+        <div class="mentor-area-badge">🎯 Enterprise Sales — Life Sciences Tools</div>
+      </div>
+      <div class="mentor-rationale">Mission-aligned expert: "empowering innovators in bringing life science tools and technologies to market." BioTech & Pharma vertical expertise. Life sciences commercialization is his core domain — directly analogous to Consilience Bio's challenge of selling a highly technical platform to scientific buyers in pharma and biotech. Can accelerate the entire commercialization playbook.</div>
+      <div class="tags-area">
+        <div class="tag-row"><span class="tag-row-label">Sector</span><span class="tag tag-sector">BioTech</span><span class="tag tag-sector">Life Sciences Tools</span><span class="tag tag-sector">Pharma Commercialization</span></div>
+        <div class="tag-row"><span class="tag-row-label">Skills</span><span class="tag tag-skill">Life Sciences GTM</span><span class="tag tag-skill">Sales to Scientists</span><span class="tag tag-skill">Market Acceleration</span></div>
+        <div class="tag-row"><span class="tag-row-label">Geo</span><span class="tag tag-geo">Portugal</span><span class="tag tag-geo">Europe</span></div>
+      </div>
+      <a href="https://www.linkedin.com/in/i5biosales" target="_blank" class="linkedin-link">🔗 linkedin.com/in/i5biosales</a>
+    </div>
+
+    <!-- 5. Delphine Bensimon -->
+    <div class="mentor-card card-relative top-card">
+      <div class="top-badge">⭐ Top</div>
+      <div class="mentor-card-top">
+        <div class="mentor-header">
+          <div class="mentor-avatar av-red">DB</div>
+          <div>
+            <div class="mentor-name">Delphine Bensimon</div>
+            <div class="mentor-location">📍 Paris, France</div>
+          </div>
+        </div>
+        <div class="scores-row">
+          <span class="score-pill score-dmf">DMF 8.8</span>
+          <span class="score-pill score-conf">Conf 8.6</span>
+        </div>
+        <div class="mentor-area-badge">🎯 GTM — Cosmetics & BioTech</div>
+      </div>
+      <div class="mentor-rationale"><strong>Works at L'Oréal</strong> — Consilience Bio's active design partner with prototype finalizing and a published result in Nature Scientific Reports. MedTech & BioTech & Pharma expertise. Her direct position inside one of Consilience's most strategically important design partners creates unique insight into the corporate buyer journey and internal decision-making process. Invaluable for validating and closing the L'Oréal commercial pilot.</div>
+      <div class="tags-area">
+        <div class="tag-row"><span class="tag-row-label">Sector</span><span class="tag tag-sector">BioTech & Pharma</span><span class="tag tag-sector">MedTech</span><span class="tag tag-sector">Cosmetics/FMCG</span></div>
+        <div class="tag-row"><span class="tag-row-label">Skills</span><span class="tag tag-skill">Corporate Innovation</span><span class="tag tag-skill">Buyer Journey</span><span class="tag tag-skill">2× Founder</span><span class="tag tag-skill">VC Training</span></div>
+        <div class="tag-row"><span class="tag-row-label">Geo</span><span class="tag tag-geo">France</span></div>
+      </div>
+      <a href="https://www.linkedin.com/in/delphine-bensimon-89360539" target="_blank" class="linkedin-link">🔗 linkedin.com/in/delphine-bensimon</a>
+    </div>
+
+    <!-- 6. Eric Dutang -->
+    <div class="mentor-card card-relative top-card">
+      <div class="top-badge">⭐ Top</div>
+      <div class="mentor-card-top">
+        <div class="mentor-header">
+          <div class="mentor-avatar av-teal">ED</div>
+          <div>
+            <div class="mentor-name">Eric Dutang</div>
+            <div class="mentor-location">📍 New York, United States</div>
+          </div>
+        </div>
+        <div class="scores-row">
+          <span class="score-pill score-dmf">DMF 8.7</span>
+          <span class="score-pill score-conf">Conf 8.5</span>
+        </div>
+        <div class="mentor-area-badge">🚀 Series A · Fundraising · US BioTech</div>
+      </div>
+      <div class="mentor-rationale">CFO of Cellectis (IPO on NASDAQ, $400M+). KPMG M&A specialist. "France BioTech" network leader. Based in NY with extensive France/US biotech network — directly overlapping with Consilience Bio's primary target geography. Mentors specifically in HealthTech/BioTech. Ideal to structure the Series A fundraise, manage NASDAQ-side investor relations, and open doors in the NY/Boston biotech corridor.</div>
+      <div class="tags-area">
+        <div class="tag-row"><span class="tag-row-label">Sector</span><span class="tag tag-sector">BioTech</span><span class="tag tag-sector">HealthTech</span><span class="tag tag-sector">Life Sciences Finance</span></div>
+        <div class="tag-row"><span class="tag-row-label">Skills</span><span class="tag tag-skill">Fundraising</span><span class="tag tag-skill">M&amp;A</span><span class="tag tag-skill">Finance</span><span class="tag tag-skill">NASDAQ IPO</span><span class="tag tag-skill">Exit Scenarios</span></div>
+        <div class="tag-row"><span class="tag-row-label">Geo</span><span class="tag tag-geo">USA (NY)</span><span class="tag tag-geo">France</span></div>
+      </div>
+      <a href="https://www.linkedin.com/in/eric-dutang-a484b41b/" target="_blank" class="linkedin-link">🔗 linkedin.com/in/eric-dutang</a>
+    </div>
+
+    <!-- 7. Reindert Dekker -->
+    <div class="mentor-card card-relative top-card">
+      <div class="top-badge">⭐ Top</div>
+      <div class="mentor-card-top">
+        <div class="mentor-header">
+          <div class="mentor-avatar av-orange">RD</div>
+          <div>
+            <div class="mentor-name">Reindert Dekker</div>
+            <div class="mentor-location">📍 Netherlands</div>
+          </div>
+        </div>
+        <div class="scores-row">
+          <span class="score-pill score-dmf">DMF 8.7</span>
+          <span class="score-pill score-conf">Conf 8.5</span>
+        </div>
+        <div class="mentor-area-badge">🎯 GTM — BioTech × Food × Health</div>
+      </div>
+      <div class="mentor-rationale">International business strategist with specific expertise in health, biotech, and sustainable food systems. Advises early-stage startups in precision fermentation, functional nutrition, and healthtech. Active in Europe, Southeast Asia, and Latin America. Biotech applied to nutraceuticals, skin, and AgriTech — directly intersecting Consilience Bio's secondary market (Lesaffre, Lallemand microbiome + cosmetics). GTM and market penetration specialist.</div>
+      <div class="tags-area">
+        <div class="tag-row"><span class="tag-row-label">Sector</span><span class="tag tag-sector">BioTech & Pharma</span><span class="tag tag-sector">FoodTech</span><span class="tag tag-sector">HealthTech</span><span class="tag tag-sector">Nutraceuticals</span></div>
+        <div class="tag-row"><span class="tag-row-label">Skills</span><span class="tag tag-skill">GTM Market Penetration</span><span class="tag tag-skill">Distribution Channels</span><span class="tag tag-skill">Partnerships</span><span class="tag tag-skill">Product Strategy</span></div>
+        <div class="tag-row"><span class="tag-row-label">Geo</span><span class="tag tag-geo">Netherlands</span><span class="tag tag-geo">Europe</span><span class="tag tag-geo">LatAm</span></div>
+      </div>
+      <a href="https://www.linkedin.com/in/reindert-dekker" target="_blank" class="linkedin-link">🔗 linkedin.com/in/reindert-dekker</a>
+    </div>
+
+    <!-- 8. Laurence Ainouz -->
+    <div class="mentor-card card-relative top-card">
+      <div class="top-badge">⭐ Top</div>
+      <div class="mentor-card-top">
+        <div class="mentor-header">
+          <div class="mentor-avatar av-purple">LA</div>
+          <div>
+            <div class="mentor-name">Laurence Ainouz</div>
+            <div class="mentor-location">📍 Paris, France</div>
+          </div>
+        </div>
+        <div class="scores-row">
+          <span class="score-pill score-dmf">DMF 8.6</span>
+          <span class="score-pill score-conf">Conf 8.4</span>
+        </div>
+        <div class="mentor-area-badge">🚀 Strategic Partnerships · BioTech</div>
+      </div>
+      <div class="mentor-rationale">Serial entrepreneur with Silicon Valley and Tel Aviv background (founded Word GSM). BioTech & Pharma vertical specialist. Onboarded as Lead Mentor. Expertise in strategic partnerships directly relevant to Consilience's instrument vendor and academic consortia pipeline. Her extensive network across Silicon Valley and biotech hubs can open doors for Consilience Bio's US expansion strategy.</div>
+      <div class="tags-area">
+        <div class="tag-row"><span class="tag-row-label">Sector</span><span class="tag tag-sector">BioTech & Pharma</span><span class="tag tag-sector">HealthTech</span></div>
+        <div class="tag-row"><span class="tag-row-label">Skills</span><span class="tag tag-skill">Strategic Partnerships</span><span class="tag tag-skill">Entrepreneurship</span><span class="tag tag-skill">Silicon Valley Network</span></div>
+        <div class="tag-row"><span class="tag-row-label">Geo</span><span class="tag tag-geo">France</span><span class="tag tag-geo">USA</span><span class="tag tag-geo">Israel</span></div>
+      </div>
+      <a href="https://www.linkedin.com/in/laurenceainouz" target="_blank" class="linkedin-link">🔗 linkedin.com/in/laurenceainouz</a>
+    </div>
+
+    <!-- 9. Gitte Hesselholt -->
+    <div class="mentor-card card-relative top-card">
+      <div class="top-badge">⭐ Top</div>
+      <div class="mentor-card-top">
+        <div class="mentor-header">
+          <div class="mentor-avatar av-blue">GH</div>
+          <div>
+            <div class="mentor-name">Gitte Hesselholt</div>
+            <div class="mentor-location">📍 Copenhagen, Denmark</div>
+          </div>
+        </div>
+        <div class="scores-row">
+          <span class="score-pill score-dmf">DMF 8.5</span>
+          <span class="score-pill score-conf">Conf 8.3</span>
+        </div>
+        <div class="mentor-area-badge">🧬 Product Dev · AI in Healthcare</div>
+      </div>
+      <div class="mentor-rationale">Pioneering AI applications in healthcare from McKinsey background. Cross-industry expertise: McKinsey → Carlsberg → medical technology/diagnostics → green energy. BioTech & Pharma + HealthTech SaaS double classification. Her practical experience applying AI in a regulated life sciences environment is directly relevant to Consilience Bio's platform design and stakeholder communication challenge with scientific buyers.</div>
+      <div class="tags-area">
+        <div class="tag-row"><span class="tag-row-label">Sector</span><span class="tag tag-sector">BioTech & Pharma</span><span class="tag tag-sector">MedTech</span><span class="tag tag-sector">HealthTech SaaS</span><span class="tag tag-sector">Food</span></div>
+        <div class="tag-row"><span class="tag-row-label">Skills</span><span class="tag tag-skill">AI in Life Sciences</span><span class="tag tag-skill">McKinsey Strategy</span><span class="tag tag-skill">Market Dev</span></div>
+        <div class="tag-row"><span class="tag-row-label">Geo</span><span class="tag tag-geo">Denmark</span><span class="tag tag-geo">Europe</span></div>
+      </div>
+      <a href="https://www.linkedin.com/in/gittehesselholt" target="_blank" class="linkedin-link">🔗 linkedin.com/in/gittehesselholt</a>
+    </div>
+
+    <!-- 10. Guillaume Balas -->
+    <div class="mentor-card card-relative top-card">
+      <div class="top-badge">⭐ Top</div>
+      <div class="mentor-card-top">
+        <div class="mentor-header">
+          <div class="mentor-avatar av-teal">GB</div>
+          <div>
+            <div class="mentor-name">Guillaume Balas</div>
+            <div class="mentor-location">📍 Paris, France</div>
+          </div>
+        </div>
+        <div class="scores-row">
+          <span class="score-pill score-dmf">DMF 8.5</span>
+          <span class="score-pill score-conf">Conf 8.2</span>
+        </div>
+        <div class="mentor-area-badge">🎯 GTM B2B · API Platform Sales</div>
+      </div>
+      <div class="mentor-rationale">Co-founded an API management platform (sold to Aredate 2016). Deep B2B GTM and enterprise sales for technical/API products — the most precise structural analog to Consilience Bio's API/SDK/CLI go-to-market motion. BioTech vertical listed. Currently active in mentoring program. His hands-on experience selling technical API infrastructure to enterprise buyers is exactly what Sébastien needs to build a repeatable sales playbook.</div>
+      <div class="tags-area">
+        <div class="tag-row"><span class="tag-row-label">Sector</span><span class="tag tag-sector">BioTech (vertical)</span><span class="tag tag-sector">API/SaaS</span><span class="tag tag-sector">B2B Tech</span></div>
+        <div class="tag-row"><span class="tag-row-label">Skills</span><span class="tag tag-skill">GTM B2B</span><span class="tag tag-skill">API Platform Sales</span><span class="tag tag-skill">Consulting</span><span class="tag tag-skill">Coaching</span></div>
+        <div class="tag-row"><span class="tag-row-label">Geo</span><span class="tag tag-geo">France</span></div>
+      </div>
+      <a href="https://www.linkedin.com/in/guillaumebalas/" target="_blank" class="linkedin-link">🔗 linkedin.com/in/guillaumebalas</a>
+    </div>
+
+  </div>
+</section>
+
+<!-- QUALIFIED MENTORS -->
+<section id="qualified-mentors" class="section">
+  <div class="section-header">
+    <div class="section-tag">Extended Selection</div>
+    <h2>✅ Qualified Mentors — DMF Score 7.0–8.4</h2>
+    <p>49 mentors with strong alignment across at least one critical dimension (sector depth, functional skill, or strategic geography). Organized by primary mentoring area.</p>
+  </div>
+
+  <div class="subsection-label">🧬 Product Development & AI/Data Architecture (Score 7.0–8.4)</div>
+  <div class="mentor-grid">
+
+    <!-- Sophie Buresi -->
+    <div class="mentor-card qualified-card">
+      <div class="mentor-card-top">
+        <div class="mentor-header"><div class="mentor-avatar av-purple">SB</div><div><div class="mentor-name">Sophie Buresi</div><div class="mentor-location">📍 France</div></div></div>
+        <div class="scores-row"><span class="score-pill score-dmf">DMF 8.3</span><span class="score-pill score-conf">Conf 8.0</span></div>
+        <div class="mentor-area-badge">🧬 Product Dev — AI × Cosmetics</div>
+      </div>
+      <div class="mentor-rationale">10 years AI/Data. Artefact (opened US bureaux). LVMH Christian Dior perfume & cosmetics division. Pernod Ricard consulting. ETAM data team builder. Unique intersection of AI/data product expertise and L'Oréal's sector (luxury cosmetics). Can directly advise on product strategy for corporate cosmetics buyers — Consilience Bio's secondary and most accessible early market.</div>
+      <div class="tags-area">
+        <div class="tag-row"><span class="tag-row-label">Sector</span><span class="tag tag-sector">AI/Data</span><span class="tag tag-sector">Cosmetics/FMCG</span><span class="tag tag-sector">SaaS</span></div>
+        <div class="tag-row"><span class="tag-row-label">Skills</span><span class="tag tag-skill">Product</span><span class="tag tag-skill">Data Strategy</span><span class="tag tag-skill">AI Implementation</span></div>
+        <div class="tag-row"><span class="tag-row-label">Geo</span><span class="tag tag-geo">France</span><span class="tag tag-geo">USA</span></div>
+      </div>
+      <a href="https://www.linkedin.com/in/sophieburesigallay" target="_blank" class="linkedin-link">🔗 linkedin.com/in/sophieburesigallay</a>
+    </div>
+
+    <!-- Romain Fradin -->
+    <div class="mentor-card qualified-card">
+      <div class="mentor-card-top">
+        <div class="mentor-header"><div class="mentor-avatar av-blue">RF</div><div><div class="mentor-name">Romain Fradin</div><div class="mentor-location">📍 Paris, France</div></div></div>
+        <div class="scores-row"><span class="score-pill score-dmf">DMF 8.2</span><span class="score-pill score-conf">Conf 8.0</span></div>
+        <div class="mentor-area-badge">🧬 Product Dev — AI/Data CTO</div>
+      </div>
+      <div class="mentor-rationale">12+ years tech. Lead Tech in Data/AI, manages 60-person tech teams. Invested via Blast (PE). Accompanies AI/Data startups specifically. "Loves mentoring." Profile CTO Scale. Ideal for stress-testing Consilience Bio's data architecture choices, AI agent orchestration design, and foundation model training strategy — directly technical and operational.</div>
+      <div class="tags-area">
+        <div class="tag-row"><span class="tag-row-label">Sector</span><span class="tag tag-sector">AI/Data</span><span class="tag tag-sector">Tech</span></div>
+        <div class="tag-row"><span class="tag-row-label">Skills</span><span class="tag tag-skill">Technical Engineering</span><span class="tag tag-skill">AI</span><span class="tag tag-skill">Data Architecture</span><span class="tag tag-skill">Team Scaling</span></div>
+        <div class="tag-row"><span class="tag-row-label">Geo</span><span class="tag tag-geo">France</span></div>
+      </div>
+      <a href="https://www.linkedin.com/in/romain-fradin-9522a6173" target="_blank" class="linkedin-link">🔗 linkedin.com/in/romain-fradin</a>
+    </div>
+
+    <!-- Jeremy Lezac -->
+    <div class="mentor-card qualified-card">
+      <div class="mentor-card-top">
+        <div class="mentor-header"><div class="mentor-avatar av-teal">JL</div><div><div class="mentor-name">Jeremy Lezac</div><div class="mentor-location">📍 Paris, France</div></div></div>
+        <div class="scores-row"><span class="score-pill score-dmf">DMF 8.0</span><span class="score-pill score-conf">Conf 7.8</span></div>
+        <div class="mentor-area-badge">🧬 Product Dev — ML/AI Strategy</div>
+      </div>
+      <div class="mentor-rationale">13-15 years tech. ML expert. Former Thales. PM at Clustree (HR tech, acquired for €350M). Now accompanies startups on AI strategy specifically. DeepTech focus. His position as an AI product strategist who helps organizations build human-centered AI products is directly applicable to Consilience Bio's challenge of making complex ML pipelines usable by research scientists.</div>
+      <div class="tags-area">
+        <div class="tag-row"><span class="tag-row-label">Sector</span><span class="tag tag-sector">Data/AI</span><span class="tag tag-sector">SaaS</span><span class="tag tag-sector">DeepTech</span></div>
+        <div class="tag-row"><span class="tag-row-label">Skills</span><span class="tag tag-skill">ML/AI</span><span class="tag tag-skill">Product Strategy</span><span class="tag tag-skill">Technical Engineering</span></div>
+        <div class="tag-row"><span class="tag-row-label">Geo</span><span class="tag tag-geo">France</span></div>
+      </div>
+      <a href="https://www.linkedin.com/in/jeremylezac" target="_blank" class="linkedin-link">🔗 linkedin.com/in/jeremylezac</a>
+    </div>
+
+    <!-- Pierre Baillet -->
+    <div class="mentor-card qualified-card">
+      <div class="mentor-card-top">
+        <div class="mentor-header"><div class="mentor-avatar av-green">PB</div><div><div class="mentor-name">Pierre Baillet</div><div class="mentor-location">📍 Bordeaux, France</div></div></div>
+        <div class="scores-row"><span class="score-pill score-dmf">DMF 7.5</span><span class="score-pill score-conf">Conf 7.3</span></div>
+        <div class="mentor-area-badge">🧬 Product Dev — Cloud Architecture</div>
+      </div>
+      <div class="mentor-rationale">25 years tech. Expert in backend, server-side, and cloud architecture. Full remote senior engineer mentoring profile. Consilience Bio's platform requires robust cloud/data infrastructure to scale API/SDK access across diverse genomics file formats. Pierre's deep cloud expertise provides grounding for the infrastructure decisions Mario Cornejo (CTO) faces in building the platform.</div>
+      <div class="tags-area">
+        <div class="tag-row"><span class="tag-row-label">Sector</span><span class="tag tag-sector">Cloud</span><span class="tag tag-sector">Data</span><span class="tag tag-sector">Software</span></div>
+        <div class="tag-row"><span class="tag-row-label">Skills</span><span class="tag tag-skill">Cloud Architecture</span><span class="tag tag-skill">Data Engineering</span><span class="tag tag-skill">IoT</span></div>
+        <div class="tag-row"><span class="tag-row-label">Geo</span><span class="tag tag-geo">France</span></div>
+      </div>
+      <a href="https://www.linkedin.com/in/octplane/" target="_blank" class="linkedin-link">🔗 linkedin.com/in/octplane</a>
+    </div>
+
+    <!-- Martin Foerster -->
+    <div class="mentor-card qualified-card">
+      <div class="mentor-card-top">
+        <div class="mentor-header"><div class="mentor-avatar av-orange">MF</div><div><div class="mentor-name">Martin Foerster</div><div class="mentor-location">📍 Berlin, Germany</div></div></div>
+        <div class="scores-row"><span class="score-pill score-dmf">DMF 7.2</span><span class="score-pill score-conf">Conf 7.0</span></div>
+        <div class="mentor-area-badge">🧬 Product Dev — AI & Data Leadership</div>
+      </div>
+      <div class="mentor-rationale">Head of AI & Data at Porsche for 6 years. Founded 2 companies. Dual interest: sharing knowledge + mentoring. His experience building AI/Data teams at enterprise scale (Porsche) is valuable for advising on Consilience's data flywheel architecture and the organizational structures needed to build AI-native products for large corporate clients.</div>
+      <div class="tags-area">
+        <div class="tag-row"><span class="tag-row-label">Sector</span><span class="tag tag-sector">AI</span><span class="tag tag-sector">Automotive</span><span class="tag tag-sector">Enterprise Tech</span></div>
+        <div class="tag-row"><span class="tag-row-label">Skills</span><span class="tag tag-skill">AI Leadership</span><span class="tag tag-skill">Data Strategy</span><span class="tag tag-skill">Founder</span></div>
+        <div class="tag-row"><span class="tag-row-label">Geo</span><span class="tag tag-geo">Germany</span></div>
+      </div>
+      <a href="https://linkedin.com/in/foerstermartin" target="_blank" class="linkedin-link">🔗 linkedin.com/in/foerstermartin</a>
+    </div>
+
+    <!-- Simone Mazzoni -->
+    <div class="mentor-card qualified-card">
+      <div class="mentor-card-top">
+        <div class="mentor-header"><div class="mentor-avatar av-blue">SM</div><div><div class="mentor-name">Simone Mazzoni</div><div class="mentor-location">📍 Italy</div></div></div>
+        <div class="scores-row"><span class="score-pill score-dmf">DMF 7.5</span><span class="score-pill score-conf">Conf 7.3</span></div>
+        <div class="mentor-area-badge">🧬 Product Dev — Exited AI/Data Founder</div>
+      </div>
+      <div class="mentor-rationale">Co-founded Bandyer (cloud-based video/audio for banks, insurance, healthcare) sold to NYSE-listed company in 2021. CTO of an exited tech company. Healthcare/FinTech data platforms. His experience as an exited founder of an AI/data platform sold to a large US-listed acquirer maps well onto Consilience Bio's exit trajectory and technical product execution.</div>
+      <div class="tags-area">
+        <div class="tag-row"><span class="tag-row-label">Sector</span><span class="tag tag-sector">AI/Data</span><span class="tag tag-sector">HealthTech</span><span class="tag tag-sector">Cloud Platform</span></div>
+        <div class="tag-row"><span class="tag-row-label">Skills</span><span class="tag tag-skill">CTO/Founder</span><span class="tag tag-skill">Product Dev</span><span class="tag tag-skill">Exit Strategy</span></div>
+        <div class="tag-row"><span class="tag-row-label">Geo</span><span class="tag tag-geo">Italy</span></div>
+      </div>
+      <a href="https://www.linkedin.com/in/simonemazzoni/" target="_blank" class="linkedin-link">🔗 linkedin.com/in/simonemazzoni</a>
+    </div>
+
+  </div>
+
+  <div class="subsection-label">🎯 Enterprise Sales & GTM (Score 7.0–8.4)</div>
+  <div class="mentor-grid">
+
+    <!-- Tim Seears -->
+    <div class="mentor-card qualified-card">
+      <div class="mentor-card-top">
+        <div class="mentor-header"><div class="mentor-avatar av-purple">TS</div><div><div class="mentor-name">Tim Seears</div><div class="mentor-location">📍 London, UK</div></div></div>
+        <div class="scores-row"><span class="score-pill score-dmf">DMF 8.0</span><span class="score-pill score-conf">Conf 7.8</span></div>
+        <div class="mentor-area-badge">🎯 GTM · VC · HealthTech Scaling</div>
+      </div>
+      <div class="mentor-rationale">HealthTech/VC specialist with extensive mentoring skills (GTM, scaling, fundraising, internationalization, VC, KPI definition, strategic partnerships). Invested 60+ deals in AI, cleantech, spacetech. Mentor at 4 accelerators. Active investor with London base provides UK access. Strong track record combining VC-side and operational mentoring for HealthTech scaling rounds.</div>
+      <div class="tags-area">
+        <div class="tag-row"><span class="tag-row-label">Sector</span><span class="tag tag-sector">HealthTech</span><span class="tag tag-sector">VC</span><span class="tag tag-sector">AI</span></div>
+        <div class="tag-row"><span class="tag-row-label">Skills</span><span class="tag tag-skill">GTM</span><span class="tag tag-skill">Scaling</span><span class="tag tag-skill">Fundraising</span><span class="tag tag-skill">VC Network</span></div>
+        <div class="tag-row"><span class="tag-row-label">Geo</span><span class="tag tag-geo">UK</span></div>
+      </div>
+      <a href="https://www.linkedin.com/in/tseears" target="_blank" class="linkedin-link">🔗 linkedin.com/in/tseears</a>
+    </div>
+
+    <!-- Valeria Temple -->
+    <div class="mentor-card qualified-card">
+      <div class="mentor-card-top">
+        <div class="mentor-header"><div class="mentor-avatar av-teal">VT</div><div><div class="mentor-name">Valeria Temple</div><div class="mentor-location">📍 Oslo, Norway</div></div></div>
+        <div class="scores-row"><span class="score-pill score-dmf">DMF 7.8</span><span class="score-pill score-conf">Conf 7.6</span></div>
+        <div class="mentor-area-badge">🎯 Enterprise SaaS Sales — US Market</div>
+      </div>
+      <div class="mentor-rationale">CIO assistant at Skype (SF 2011). Director of Strategic Accounts at TalkPlus (VC-backed SaaS, SF). Sales Manager at Koombea (enterprise SaaS, SF). Launched DeepTech energy incubator in Norway. Deep enterprise SaaS sales experience specifically in San Francisco (Consilience Bio's primary target city). Her hands-on experience selling enterprise SaaS to large accounts is directly applicable to Sébastien's outbound motion.</div>
+      <div class="tags-area">
+        <div class="tag-row"><span class="tag-row-label">Sector</span><span class="tag tag-sector">Enterprise SaaS</span><span class="tag tag-sector">DeepTech</span><span class="tag tag-sector">HealthTech</span></div>
+        <div class="tag-row"><span class="tag-row-label">Skills</span><span class="tag tag-skill">SaaS Sales</span><span class="tag tag-skill">US Enterprise GTM</span><span class="tag tag-skill">Strategic Accounts</span></div>
+        <div class="tag-row"><span class="tag-row-label">Geo</span><span class="tag tag-geo">Norway</span><span class="tag tag-geo">USA (SF)</span></div>
+      </div>
+      <a href="https://www.linkedin.com/in/vtemple" target="_blank" class="linkedin-link">🔗 linkedin.com/in/vtemple</a>
+    </div>
+
+    <!-- Stefan Meyerolbersleben -->
+    <div class="mentor-card qualified-card">
+      <div class="mentor-card-top">
+        <div class="mentor-header"><div class="mentor-avatar av-orange">SM2</div><div><div class="mentor-name">Stefan Meyerolbersleben</div><div class="mentor-location">📍 Germany</div></div></div>
+        <div class="scores-row"><span class="score-pill score-dmf">DMF 7.8</span><span class="score-pill score-conf">Conf 7.5</span></div>
+        <div class="mentor-area-badge">🎯 GTM · Sales — Tech/AI/Healthcare</div>
+      </div>
+      <div class="mentor-rationale">14 years at Reply (Italian tech powerhouse). GTM and Sales specialist for AI/Tech/Software startups. Healthcare vertical listed. DeepTech, SalesTech, HealthTech. His enterprise sales expertise in AI/Tech products for the healthcare vertical aligns precisely with Consilience Bio's need to build a repeatable outbound sales process for technical products targeting pharma/biotech buyers.</div>
+      <div class="tags-area">
+        <div class="tag-row"><span class="tag-row-label">Sector</span><span class="tag tag-sector">AI/Tech</span><span class="tag tag-sector">Healthcare</span><span class="tag tag-sector">SaaS</span></div>
+        <div class="tag-row"><span class="tag-row-label">Skills</span><span class="tag tag-skill">GTM</span><span class="tag tag-skill">Sales</span><span class="tag tag-skill">Enterprise Tech</span></div>
+        <div class="tag-row"><span class="tag-row-label">Geo</span><span class="tag tag-geo">Germany</span></div>
+      </div>
+      <a href="https://www.linkedin.com/in/stefanmeyerolbersleben/" target="_blank" class="linkedin-link">🔗 linkedin.com/in/stefanmeyerolbersleben</a>
+    </div>
+
+    <!-- Anna Naydenova -->
+    <div class="mentor-card qualified-card">
+      <div class="mentor-card-top">
+        <div class="mentor-header"><div class="mentor-avatar av-green">AN</div><div><div class="mentor-name">Anna Naydenova</div><div class="mentor-location">📍 Paris, France</div></div></div>
+        <div class="scores-row"><span class="score-pill score-dmf">DMF 7.5</span><span class="score-pill score-conf">Conf 7.3</span></div>
+        <div class="mentor-area-badge">🎯 B2B GTM · Sales Scaling</div>
+      </div>
+      <div class="mentor-rationale">Ex-entrepreneur (startup exit with Series A). Specializes in launching and scaling B2B tech companies. Worked at eBay. Retail and marketplace expertise. Part of Next Big Thing accelerator. Strong track record of GTM execution and commercial team building for B2B tech products — applicable to Consilience's challenge of building first enterprise sales motions.</div>
+      <div class="tags-area">
+        <div class="tag-row"><span class="tag-row-label">Sector</span><span class="tag tag-sector">AI/Tech</span><span class="tag tag-sector">SaaS</span><span class="tag tag-sector">B2B</span></div>
+        <div class="tag-row"><span class="tag-row-label">Skills</span><span class="tag tag-skill">GTM</span><span class="tag tag-skill">B2B Sales</span><span class="tag tag-skill">General Management</span><span class="tag tag-skill">Scaling</span></div>
+        <div class="tag-row"><span class="tag-row-label">Geo</span><span class="tag tag-geo">France</span></div>
+      </div>
+      <a href="https://www.linkedin.com/in/annanaydenova" target="_blank" class="linkedin-link">🔗 linkedin.com/in/annanaydenova</a>
+    </div>
+
+    <!-- Gaurang Telang -->
+    <div class="mentor-card qualified-card">
+      <div class="mentor-card-top">
+        <div class="mentor-header"><div class="mentor-avatar av-red">GT</div><div><div class="mentor-name">Gaurang Telang</div><div class="mentor-location">📍 Paris, France</div></div></div>
+        <div class="scores-row"><span class="score-pill score-dmf">DMF 7.5</span><span class="score-pill score-conf">Conf 7.3</span></div>
+        <div class="mentor-area-badge">🎯 GTM · Product — Healthcare/DeepTech</div>
+      </div>
+      <div class="mentor-rationale">GTM + Product Management expertise. Healthcare & BioTech vertical listed. DeepTech. SalesTech & MarTech. His dual competency in GTM and product management specifically within the healthcare and DeepTech verticals makes him well-suited to advise on how to position Consilience Bio's technical platform to scientific decision-makers — a critical and often underestimated go-to-market challenge.</div>
+      <div class="tags-area">
+        <div class="tag-row"><span class="tag-row-label">Sector</span><span class="tag tag-sector">Healthcare & BioTech</span><span class="tag tag-sector">DeepTech</span><span class="tag tag-sector">SaaS</span></div>
+        <div class="tag-row"><span class="tag-row-label">Skills</span><span class="tag tag-skill">GTM</span><span class="tag tag-skill">Product Management</span><span class="tag tag-skill">Enterprise Sales</span></div>
+        <div class="tag-row"><span class="tag-row-label">Geo</span><span class="tag tag-geo">France</span></div>
+      </div>
+      <a href="https://www.linkedin.com/in/gt2024/" target="_blank" class="linkedin-link">🔗 linkedin.com/in/gt2024</a>
+    </div>
+
+    <!-- Christophe Duhayer -->
+    <div class="mentor-card qualified-card">
+      <div class="mentor-card-top">
+        <div class="mentor-header"><div class="mentor-avatar av-blue">CD</div><div><div class="mentor-name">Christophe Duhayer</div><div class="mentor-location">📍 Paris, France</div></div></div>
+        <div class="scores-row"><span class="score-pill score-dmf">DMF 7.5</span><span class="score-pill score-conf">Conf 7.3</span></div>
+        <div class="mentor-area-badge">🎯 GTM — Medical Devices × Life Sciences</div>
+      </div>
+      <div class="mentor-rationale">20 years medical device in Europe and Americas (US, LatAm). R&D for equipment and digital (software + app). 7 production plants for medicinal products. GTM, internationalization, and pricing expertise. His practical experience selling complex technical products to hospital/pharma procurement committees is highly transferable to Consilience Bio's sales motion with biotech/pharma decision-makers.</div>
+      <div class="tags-area">
+        <div class="tag-row"><span class="tag-row-label">Sector</span><span class="tag tag-sector">HealthTech</span><span class="tag tag-sector">MedTech</span><span class="tag tag-sector">Medical Software</span></div>
+        <div class="tag-row"><span class="tag-row-label">Skills</span><span class="tag tag-skill">GTM</span><span class="tag tag-skill">Internationalization</span><span class="tag tag-skill">Pricing</span><span class="tag tag-skill">Sales</span></div>
+        <div class="tag-row"><span class="tag-row-label">Geo</span><span class="tag tag-geo">France</span><span class="tag tag-geo">USA</span><span class="tag tag-geo">LatAm</span></div>
+      </div>
+      <a href="https://www.linkedin.com/in/christophe-duhayer-ba54a228/" target="_blank" class="linkedin-link">🔗 linkedin.com/in/christophe-duhayer</a>
+    </div>
+
+    <!-- Jan Poulsen -->
+    <div class="mentor-card qualified-card">
+      <div class="mentor-card-top">
+        <div class="mentor-header"><div class="mentor-avatar av-teal">JP</div><div><div class="mentor-name">Jan Poulsen</div><div class="mentor-location">📍 The Hague, Netherlands</div></div></div>
+        <div class="scores-row"><span class="score-pill score-dmf">DMF 7.3</span><span class="score-pill score-conf">Conf 7.1</span></div>
+        <div class="mentor-area-badge">🎯 GTM — B2B SaaS · Healthcare</div>
+      </div>
+      <div class="mentor-rationale">Board-level executive with balanced commercial and operational focus across Software/SaaS and Consulting sectors. GTM strategies for B2B SaaS. Data-driven solutions. Multiple board seats. Healthcare vertical. His board-level perspective on B2B SaaS commercialization and data-driven solution selling is relevant to advising Sébastien on enterprise deal structuring and contract negotiations.</div>
+      <div class="tags-area">
+        <div class="tag-row"><span class="tag-row-label">Sector</span><span class="tag tag-sector">Software/SaaS</span><span class="tag tag-sector">Healthcare</span><span class="tag tag-sector">Consulting</span></div>
+        <div class="tag-row"><span class="tag-row-label">Skills</span><span class="tag tag-skill">GTM B2B SaaS</span><span class="tag tag-skill">General Management</span><span class="tag tag-skill">Board</span></div>
+        <div class="tag-row"><span class="tag-row-label">Geo</span><span class="tag tag-geo">Netherlands</span></div>
+      </div>
+      <a href="https://www.linkedin.com/in/ceo-jan-poulsen" target="_blank" class="linkedin-link">🔗 linkedin.com/in/ceo-jan-poulsen</a>
+    </div>
+
+    <!-- Mark Dunning -->
+    <div class="mentor-card qualified-card">
+      <div class="mentor-card-top">
+        <div class="mentor-header"><div class="mentor-avatar av-orange">MDu</div><div><div class="mentor-name">Mark Dunning</div><div class="mentor-location">📍 Barcelona, Spain</div></div></div>
+        <div class="scores-row"><span class="score-pill score-dmf">DMF 7.6</span><span class="score-pill score-conf">Conf 7.4</span></div>
+        <div class="mentor-area-badge">🎯 GTM · AI — HealthTech/Data</div>
+      </div>
+      <div class="mentor-rationale">Data/AI specialist. Lead mentor experience. Healthcare & BioTech + AI + Data + SaaS verticals all listed. Demonstrated active lead mentor role at Aegir (data/tech company). His specific combination of data/AI expertise and healthcare vertical knowledge, combined with active lead mentoring experience, makes him well-positioned to guide Consilience Bio's technical marketing and positioning.</div>
+      <div class="tags-area">
+        <div class="tag-row"><span class="tag-row-label">Sector</span><span class="tag tag-sector">Data</span><span class="tag tag-sector">AI</span><span class="tag tag-sector">Healthcare</span><span class="tag tag-sector">SaaS</span></div>
+        <div class="tag-row"><span class="tag-row-label">Skills</span><span class="tag tag-skill">AI</span><span class="tag tag-skill">GTM</span><span class="tag tag-skill">Lead Mentor</span><span class="tag tag-skill">Data Strategy</span></div>
+        <div class="tag-row"><span class="tag-row-label">Geo</span><span class="tag tag-geo">Spain</span></div>
+      </div>
+      <a href="https://www.linkedin.com/in/markiedunning" target="_blank" class="linkedin-link">🔗 linkedin.com/in/markiedunning</a>
+    </div>
+
+    <!-- Travis Todd -->
+    <div class="mentor-card qualified-card">
+      <div class="mentor-card-top">
+        <div class="mentor-header"><div class="mentor-avatar av-purple">TT</div><div><div class="mentor-name">Travis Todd</div><div class="mentor-location">📍 Berlin, Germany</div></div></div>
+        <div class="scores-row"><span class="score-pill score-dmf">DMF 7.5</span><span class="score-pill score-conf">Conf 7.3</span></div>
+        <div class="mentor-area-badge">🎯 GTM · US-Germany Bridge · HealthTech</div>
+      </div>
+      <div class="mentor-rationale">US serial entrepreneur. Built a government-backed startup accelerator in Germany. Fund 2 focused on HealthTech & BioTech. Co-founder connecting US know-how and capital to Berlin ecosystem. His unique US-Germany bridge role and HealthTech/BioTech fund focus make him ideal for opening doors to both German biotech (Consilience's target in DACH) and US investors for the Series A.</div>
+      <div class="tags-area">
+        <div class="tag-row"><span class="tag-row-label">Sector</span><span class="tag tag-sector">HealthTech & BioTech</span><span class="tag tag-sector">VC</span><span class="tag tag-sector">Tech</span></div>
+        <div class="tag-row"><span class="tag-row-label">Skills</span><span class="tag tag-skill">B2B</span><span class="tag tag-skill">Pitch & Storytelling</span><span class="tag tag-skill">Product</span><span class="tag tag-skill">Corporate Strategy</span></div>
+        <div class="tag-row"><span class="tag-row-label">Geo</span><span class="tag tag-geo">Germany</span><span class="tag tag-geo">USA</span></div>
+      </div>
+      <a href="https://linkedin.com/in/travisjtodd" target="_blank" class="linkedin-link">🔗 linkedin.com/in/travisjtodd</a>
+    </div>
+
+  </div>
+
+  <div class="subsection-label">🚀 Strategic Partnerships, Fundraising & BioTech Finance (Score 7.0–8.4)</div>
+  <div class="mentor-grid">
+
+    <!-- Rudine Mottaghian -->
+    <div class="mentor-card qualified-card">
+      <div class="mentor-card-top">
+        <div class="mentor-header"><div class="mentor-avatar av-teal">RM</div><div><div class="mentor-name">Rudine Mottaghian</div><div class="mentor-location">📍 Paris, France</div></div></div>
+        <div class="scores-row"><span class="score-pill score-dmf">DMF 7.8</span><span class="score-pill score-conf">Conf 7.6</span></div>
+        <div class="mentor-area-badge">🚀 Partnerships — BioTech Finance</div>
+      </div>
+      <div class="mentor-rationale">CFO/CCO and co-founder of a biotech startup converting CO2 to methanol. Engineering + management consulting + investment banking + luxury fashion + biotech. BioTech & Pharma. His cross-disciplinary background (including direct biotech operator experience as a co-founder) gives him unique insight into the CFO/financial structuring challenges Consilience Bio will face as it scales.</div>
+      <div class="tags-area">
+        <div class="tag-row"><span class="tag-row-label">Sector</span><span class="tag tag-sector">BioTech & Pharma</span><span class="tag tag-sector">Fashion</span><span class="tag tag-sector">Consulting</span></div>
+        <div class="tag-row"><span class="tag-row-label">Skills</span><span class="tag tag-skill">CFO/Finance</span><span class="tag tag-skill">BioTech Operations</span><span class="tag tag-skill">M&amp;A</span></div>
+        <div class="tag-row"><span class="tag-row-label">Geo</span><span class="tag tag-geo">France</span></div>
+      </div>
+      <a href="https://www.linkedin.com/in/rudine" target="_blank" class="linkedin-link">🔗 linkedin.com/in/rudine</a>
+    </div>
+
+    <!-- Vincent Lepreux -->
+    <div class="mentor-card qualified-card">
+      <div class="mentor-card-top">
+        <div class="mentor-header"><div class="mentor-avatar av-blue">VL</div><div><div class="mentor-name">Vincent Lepreux</div><div class="mentor-location">📍 Lausanne, Switzerland</div></div></div>
+        <div class="scores-row"><span class="score-pill score-dmf">DMF 7.8</span><span class="score-pill score-conf">Conf 7.6</span></div>
+        <div class="mentor-area-badge">🚀 HealthTech VC · M&A · Series A</div>
+      </div>
+      <div class="mentor-rationale">5 years at Debiopharm Innovation Fund (HealthTech, digital health investments). M&A, Finance, VC expertise. BioTech & Pharma + HealthTech SaaS. Based in Lausanne. His direct VC investment experience in HealthTech and digital health from the investor's perspective makes him invaluable for Series A narrative construction, investor targeting, and due diligence prep.</div>
+      <div class="tags-area">
+        <div class="tag-row"><span class="tag-row-label">Sector</span><span class="tag tag-sector">BioTech & Pharma</span><span class="tag tag-sector">HealthTech SaaS</span></div>
+        <div class="tag-row"><span class="tag-row-label">Skills</span><span class="tag tag-skill">M&amp;A</span><span class="tag tag-skill">Finance</span><span class="tag tag-skill">VC</span><span class="tag tag-skill">Investment</span></div>
+        <div class="tag-row"><span class="tag-row-label">Geo</span><span class="tag tag-geo">Switzerland</span><span class="tag tag-geo">France</span></div>
+      </div>
+      <a href="https://www.linkedin.com/in/vlepreux/" target="_blank" class="linkedin-link">🔗 linkedin.com/in/vlepreux</a>
+    </div>
+
+    <!-- Franck Tetaz -->
+    <div class="mentor-card qualified-card">
+      <div class="mentor-card-top">
+        <div class="mentor-header"><div class="mentor-avatar av-green">FT</div><div><div class="mentor-name">Franck Tetaz</div><div class="mentor-location">📍 Lyon, France</div></div></div>
+        <div class="scores-row"><span class="score-pill score-dmf">DMF 7.8</span><span class="score-pill score-conf">Conf 7.6</span></div>
+        <div class="mentor-area-badge">🚀 IP/Patents — Chemistry/Biology</div>
+      </div>
+      <div class="mentor-rationale">IP/patent expert working with startups from early stage to IPO. Specialized in Chemistry and Biology. BioTech & Pharma. Career in agro-chemistry. His specialization in IP protection for biology and chemistry companies is directly critical for Consilience Bio's most important technical asset: the synthetic data generation models for multi-omics. Patent strategy for AI-driven biological methods is a highly specialized and often overlooked moat-builder.</div>
+      <div class="tags-area">
+        <div class="tag-row"><span class="tag-row-label">Sector</span><span class="tag tag-sector">BioTech & Pharma</span><span class="tag tag-sector">Chemistry</span><span class="tag tag-sector">Life Sciences</span></div>
+        <div class="tag-row"><span class="tag-row-label">Skills</span><span class="tag tag-skill">Patents/IP</span><span class="tag tag-skill">Legal</span><span class="tag tag-skill">Compliance</span><span class="tag tag-skill">Contracts</span></div>
+        <div class="tag-row"><span class="tag-row-label">Geo</span><span class="tag tag-geo">France</span></div>
+      </div>
+      <a href="https://linkedin.com/in/francktetaz" target="_blank" class="linkedin-link">🔗 linkedin.com/in/francktetaz</a>
+    </div>
+
+    <!-- Joep Lambalk -->
+    <div class="mentor-card qualified-card">
+      <div class="mentor-card-top">
+        <div class="mentor-header"><div class="mentor-avatar av-orange">JLa</div><div><div class="mentor-name">Joep Lambalk</div><div class="mentor-location">📍 Netherlands</div></div></div>
+        <div class="scores-row"><span class="score-pill score-dmf">DMF 8.0</span><span class="score-pill score-conf">Conf 7.8</span></div>
+        <div class="mentor-area-badge">🚀 Partnerships — AgriTech/Food BioTech</div>
+      </div>
+      <div class="mentor-rationale">30 years food industry. R&D background. Active in green/life science sector. Mentor at Startlife (agri/food biotech accelerator). Advises PE funds on technical due diligence. BioTech & Pharma. His combination of deep food/agri biotech knowledge and mentor experience at Startlife is directly applicable to Consilience Bio's Lesaffre and Lallemand relationships and the broader food/microbiome market segment.</div>
+      <div class="tags-area">
+        <div class="tag-row"><span class="tag-row-label">Sector</span><span class="tag tag-sector">BioTech & Pharma</span><span class="tag tag-sector">AgriTech</span><span class="tag tag-sector">FoodTech</span></div>
+        <div class="tag-row"><span class="tag-row-label">Skills</span><span class="tag tag-skill">R&amp;D</span><span class="tag tag-skill">Technical Due Dil.</span><span class="tag tag-skill">Partnerships</span><span class="tag tag-skill">Life Science Mentor</span></div>
+        <div class="tag-row"><span class="tag-row-label">Geo</span><span class="tag tag-geo">Netherlands</span></div>
+      </div>
+      <a href="https://www.linkedin.com/in/joep-lambalk-b326a0100" target="_blank" class="linkedin-link">🔗 linkedin.com/in/joep-lambalk</a>
+    </div>
+
+    <!-- Marc Karako -->
+    <div class="mentor-card qualified-card">
+      <div class="mentor-card-top">
+        <div class="mentor-header"><div class="mentor-avatar av-purple">MK</div><div><div class="mentor-name">Marc Karako</div><div class="mentor-location">📍 Paris, France</div></div></div>
+        <div class="scores-row"><span class="score-pill score-dmf">DMF 7.3</span><span class="score-pill score-conf">Conf 7.1</span></div>
+        <div class="mentor-area-badge">🚀 Finance · BioTech & Pharma</div>
+      </div>
+      <div class="mentor-rationale">Senior Advisor in private equity and professor of finance. CFO of CAC 40 company. 15 years at IBM. BioTech & Pharma classified. Close to santé/chimie/pétrole sector. Lead mentor for fintechs at Inovexus. His capital market experience, IBM enterprise background, and BioTech/Pharma proximity make him a relevant anchor for Consilience's financial structuring and investor preparation work.</div>
+      <div class="tags-area">
+        <div class="tag-row"><span class="tag-row-label">Sector</span><span class="tag tag-sector">Finance</span><span class="tag tag-sector">BioTech & Pharma</span><span class="tag tag-sector">Consulting</span></div>
+        <div class="tag-row"><span class="tag-row-label">Skills</span><span class="tag tag-skill">Finance/CFO</span><span class="tag tag-skill">PE</span><span class="tag tag-skill">IBM Enterprise</span></div>
+        <div class="tag-row"><span class="tag-row-label">Geo</span><span class="tag tag-geo">France</span></div>
+      </div>
+      <a href="https://www.linkedin.com/in/marc-karako" target="_blank" class="linkedin-link">🔗 linkedin.com/in/marc-karako</a>
+    </div>
+
+    <!-- Christophe Louvion -->
+    <div class="mentor-card qualified-card">
+      <div class="mentor-card-top">
+        <div class="mentor-header"><div class="mentor-avatar av-red">CLo</div><div><div class="mentor-name">Christophe Louvion</div><div class="mentor-location">📍 Los Angeles, USA</div></div></div>
+        <div class="scores-row"><span class="score-pill score-dmf">DMF 7.3</span><span class="score-pill score-conf">Conf 7.1</span></div>
+        <div class="mentor-area-badge">🚀 Scaling · BioTech — US Market</div>
+      </div>
+      <div class="mentor-rationale">Based in Los Angeles with BioTech & Pharma + MedTech classification. Scaling, GTM, strategic partnerships, HR expertise. Being US-based in LA (close to San Diego biotech hub and LA pharma community) offers geographic access for Consilience Bio's West Coast biotech commercialization efforts. His scaling expertise is relevant for the Series A preparation phase.</div>
+      <div class="tags-area">
+        <div class="tag-row"><span class="tag-row-label">Sector</span><span class="tag tag-sector">BioTech & Pharma</span><span class="tag tag-sector">MedTech</span></div>
+        <div class="tag-row"><span class="tag-row-label">Skills</span><span class="tag tag-skill">Scaling</span><span class="tag tag-skill">GTM</span><span class="tag tag-skill">Strategic Partnerships</span></div>
+        <div class="tag-row"><span class="tag-row-label">Geo</span><span class="tag tag-geo">USA (LA/SD)</span></div>
+      </div>
+      <a href="https://linkedin.com/in/chrislouvion" target="_blank" class="linkedin-link">🔗 linkedin.com/in/chrislouvion</a>
+    </div>
+
+  </div>
+
+  <div class="subsection-label">🏥 BioTech/HealthTech Domain Specialists (Score 7.0–8.4)</div>
+  <div class="mentor-grid">
+
+    <!-- Jean-Marc Druesne -->
+    <div class="mentor-card qualified-card">
+      <div class="mentor-card-top">
+        <div class="mentor-header"><div class="mentor-avatar av-teal">JMD</div><div><div class="mentor-name">Jean-Marc Druesne</div><div class="mentor-location">📍 Paris, France</div></div></div>
+        <div class="scores-row"><span class="score-pill score-dmf">DMF 7.3</span><span class="score-pill score-conf">Conf 7.1</span></div>
+        <div class="mentor-area-badge">🏥 HealthTech SaaS · MedTech Sales</div>
+      </div>
+      <div class="mentor-rationale">Health + Software background. HealthTech SaaS + MedTech classification. General Management + Sales skills. His experience at the intersection of health software and enterprise sales (including prior engagement with music/media industry) demonstrates cross-sector commercial agility. Relevant for Consilience Bio's narrative building and French/European enterprise health relationships.</div>
+      <div class="tags-area">
+        <div class="tag-row"><span class="tag-row-label">Sector</span><span class="tag tag-sector">HealthTech SaaS</span><span class="tag tag-sector">MedTech</span></div>
+        <div class="tag-row"><span class="tag-row-label">Skills</span><span class="tag tag-skill">General Management</span><span class="tag tag-skill">Sales</span></div>
+        <div class="tag-row"><span class="tag-row-label">Geo</span><span class="tag tag-geo">France</span></div>
+      </div>
+      <a href="https://www.linkedin.com/in/jeanmarcdruesne" target="_blank" class="linkedin-link">🔗 linkedin.com/in/jeanmarcdruesne</a>
+    </div>
+
+    <!-- Christian Skytt -->
+    <div class="mentor-card qualified-card">
+      <div class="mentor-card-top">
+        <div class="mentor-header"><div class="mentor-avatar av-blue">CS</div><div><div class="mentor-name">Christian Skytt</div><div class="mentor-location">📍 Denmark</div></div></div>
+        <div class="scores-row"><span class="score-pill score-dmf">DMF 7.5</span><span class="score-pill score-conf">Conf 7.3</span></div>
+        <div class="mentor-area-badge">🏥 HealthTech Cloud SaaS · B2B</div>
+      </div>
+      <div class="mentor-rationale">Danish Business Angels member. CDO and CCO roles at scale-up Cegal (cloud/infrastructure provider). Delivered SaaS and B2B growth across region. HealthTech SaaS. Cloud + healthcare intersection. His experience scaling a cloud infrastructure SaaS business in the healthcare context maps directly to Consilience Bio's cloud-native platform positioning.</div>
+      <div class="tags-area">
+        <div class="tag-row"><span class="tag-row-label">Sector</span><span class="tag tag-sector">HealthTech SaaS</span><span class="tag tag-sector">Cloud</span><span class="tag tag-sector">Infrastructure</span></div>
+        <div class="tag-row"><span class="tag-row-label">Skills</span><span class="tag tag-skill">CDO/CCO</span><span class="tag tag-skill">B2B SaaS Growth</span><span class="tag tag-skill">Cloud</span></div>
+        <div class="tag-row"><span class="tag-row-label">Geo</span><span class="tag tag-geo">Denmark</span></div>
+      </div>
+      <a href="https://www.linkedin.com/in/cskytt" target="_blank" class="linkedin-link">🔗 linkedin.com/in/cskytt</a>
+    </div>
+
+    <!-- Isabelle Zablit-Schmitz -->
+    <div class="mentor-card qualified-card">
+      <div class="mentor-card-top">
+        <div class="mentor-header"><div class="mentor-avatar av-green">IZ</div><div><div class="mentor-name">Isabelle Zablit-Schmitz</div><div class="mentor-location">📍 Paris, France</div></div></div>
+        <div class="scores-row"><span class="score-pill score-dmf">DMF 7.2</span><span class="score-pill score-conf">Conf 7.0</span></div>
+        <div class="mentor-area-badge">🏥 HealthTech · European Clinic Network</div>
+      </div>
+      <div class="mentor-rationale">Connected to Sentex Summit providing access to prestigious European clinics (Mayo, Cleveland, Charité Berlin, Spanish, Belgian, Italian clinics) and industrial ecosystem. HealthTech SaaS. Her healthcare institutional network across major European academic medical centers is strategically valuable for Consilience Bio's academic consortium partnership track.</div>
+      <div class="tags-area">
+        <div class="tag-row"><span class="tag-row-label">Sector</span><span class="tag tag-sector">HealthTech SaaS</span><span class="tag tag-sector">Healthcare Institutions</span></div>
+        <div class="tag-row"><span class="tag-row-label">Skills</span><span class="tag tag-skill">European Clinic Network</span><span class="tag tag-skill">Healthcare Policy</span></div>
+        <div class="tag-row"><span class="tag-row-label">Geo</span><span class="tag tag-geo">France</span><span class="tag tag-geo">Europe</span></div>
+      </div>
+      <a href="https://www.linkedin.com/in/isabellezablitschmitz" target="_blank" class="linkedin-link">🔗 linkedin.com/in/isabellezablitschmitz</a>
+    </div>
+
+    <!-- Arvind Behura -->
+    <div class="mentor-card qualified-card">
+      <div class="mentor-card-top">
+        <div class="mentor-header"><div class="mentor-avatar av-orange">AB</div><div><div class="mentor-name">Arvind Behura</div><div class="mentor-location">📍 Paris, France</div></div></div>
+        <div class="scores-row"><span class="score-pill score-dmf">DMF 7.2</span><span class="score-pill score-conf">Conf 7.0</span></div>
+        <div class="mentor-area-badge">🏥 HealthTech · Strategic Partnerships</div>
+      </div>
+      <div class="mentor-rationale">Finance + Health background. MedTech & HealthTech SaaS. General Management + Strategic Partnerships. Active mentoring at Inovexus. His dual expertise in finance and health sector strategic partnerships is well-suited for supporting Consilience Bio's partnership outreach to European pharma/medtech corporates and financial structuring for enterprise contracts.</div>
+      <div class="tags-area">
+        <div class="tag-row"><span class="tag-row-label">Sector</span><span class="tag tag-sector">MedTech</span><span class="tag tag-sector">HealthTech SaaS</span></div>
+        <div class="tag-row"><span class="tag-row-label">Skills</span><span class="tag tag-skill">General Management</span><span class="tag tag-skill">Strategic Partnerships</span><span class="tag tag-skill">Finance</span></div>
+        <div class="tag-row"><span class="tag-row-label">Geo</span><span class="tag tag-geo">France</span></div>
+      </div>
+      <a href="https://www.linkedin.com/in/arvind-behura/" target="_blank" class="linkedin-link">🔗 linkedin.com/in/arvind-behura</a>
+    </div>
+
+    <!-- Jean-Christophe Veissier -->
+    <div class="mentor-card qualified-card">
+      <div class="mentor-card-top">
+        <div class="mentor-header"><div class="mentor-avatar av-red">JCV</div><div><div class="mentor-name">Jean-Christophe Veissier</div><div class="mentor-location">📍 Paris, France</div></div></div>
+        <div class="scores-row"><span class="score-pill score-dmf">DMF 7.3</span><span class="score-pill score-conf">Conf 7.1</span></div>
+        <div class="mentor-area-badge">🏥 HealthTech SaaS · MedTech Sales</div>
+      </div>
+      <div class="mentor-rationale">Tech + HealthTech SaaS + MedTech classification. General Management + Sales expertise. Active Inovexus mentoring (Mable). IQVIA background (same as Sébastien Marque — direct organizational reference). His IQVIA experience creates a shared professional language with Consilience's CBO and his HealthTech SaaS sales expertise directly maps to the target buyer profile.</div>
+      <div class="tags-area">
+        <div class="tag-row"><span class="tag-row-label">Sector</span><span class="tag tag-sector">HealthTech SaaS</span><span class="tag tag-sector">MedTech</span></div>
+        <div class="tag-row"><span class="tag-row-label">Skills</span><span class="tag tag-skill">General Management</span><span class="tag tag-skill">Sales</span><span class="tag tag-skill">IQVIA Network</span></div>
+        <div class="tag-row"><span class="tag-row-label">Geo</span><span class="tag tag-geo">France</span></div>
+      </div>
+      <a href="https://www.linkedin.com/in/jeanchristopheveissieriqviatech" target="_blank" class="linkedin-link">🔗 linkedin.com/in/jeanchristopheveissieriqviatech</a>
+    </div>
+
+    <!-- Markus Hamprecht -->
+    <div class="mentor-card qualified-card">
+      <div class="mentor-card-top">
+        <div class="mentor-header"><div class="mentor-avatar av-blue">MH</div><div><div class="mentor-name">Markus Hamprecht</div><div class="mentor-location">📍 Hamburg, Germany</div></div></div>
+        <div class="scores-row"><span class="score-pill score-dmf">DMF 7.3</span><span class="score-pill score-conf">Conf 7.1</span></div>
+        <div class="mentor-area-badge">🏥 HealthTech GTM · DACH Market</div>
+      </div>
+      <div class="mentor-rationale">Consulting + Finance + GTM + Business Operations. HealthTech SaaS. Hamburg-based. His DACH-market GTM expertise is relevant for Consilience Bio's European expansion into Germany (unnamed German corporates are cited as "intent expressed" design partners). Active in Inovexus platform.</div>
+      <div class="tags-area">
+        <div class="tag-row"><span class="tag-row-label">Sector</span><span class="tag tag-sector">HealthTech SaaS</span><span class="tag tag-sector">Consulting</span></div>
+        <div class="tag-row"><span class="tag-row-label">Skills</span><span class="tag tag-skill">GTM</span><span class="tag tag-skill">Business Operations</span><span class="tag tag-skill">Finance</span></div>
+        <div class="tag-row"><span class="tag-row-label">Geo</span><span class="tag tag-geo">Germany</span></div>
+      </div>
+      <a href="https://www.linkedin.com/in/markushamprecht/" target="_blank" class="linkedin-link">🔗 linkedin.com/in/markushamprecht</a>
+    </div>
+
+    <!-- Kimiko Imai -->
+    <div class="mentor-card qualified-card">
+      <div class="mentor-card-top">
+        <div class="mentor-header"><div class="mentor-avatar av-teal">KI</div><div><div class="mentor-name">Kimiko Imai</div><div class="mentor-location">📍 France</div></div></div>
+        <div class="scores-row"><span class="score-pill score-dmf">DMF 7.3</span><span class="score-pill score-conf">Conf 7.1</span></div>
+        <div class="mentor-area-badge">🏥 GTM Asia — HealthTech SaaS</div>
+      </div>
+      <div class="mentor-rationale">Former JETRO mentor. Mentor at Wilco health batch. HealthTech SaaS. GTM Asia + GTM + Scaling. Given Consilience Bio's stated 25% Asia revenue target (medium-term), Kimiko's Japan/Asia GTM expertise and prior JETRO (Japan government trade agency) mentoring experience is particularly valuable for the Japan go-to-market play, especially for pharma and food companies.</div>
+      <div class="tags-area">
+        <div class="tag-row"><span class="tag-row-label">Sector</span><span class="tag tag-sector">HealthTech SaaS</span><span class="tag tag-sector">Mobility</span></div>
+        <div class="tag-row"><span class="tag-row-label">Skills</span><span class="tag tag-skill">GTM Asia</span><span class="tag tag-skill">GTM</span><span class="tag tag-skill">Scaling</span><span class="tag tag-skill">Japan Network</span></div>
+        <div class="tag-row"><span class="tag-row-label">Geo</span><span class="tag tag-geo">France</span><span class="tag tag-geo">Japan</span></div>
+      </div>
+      <a href="https://linkedin.com/in/kimikoimai" target="_blank" class="linkedin-link">🔗 linkedin.com/in/kimikoimai</a>
+    </div>
+
+    <!-- Serge Borg -->
+    <div class="mentor-card qualified-card">
+      <div class="mentor-card-top">
+        <div class="mentor-header"><div class="mentor-avatar av-purple">SBo</div><div><div class="mentor-name">Serge Borg</div><div class="mentor-location">📍 Luxembourg</div></div></div>
+        <div class="scores-row"><span class="score-pill score-dmf">DMF 7.3</span><span class="score-pill score-conf">Conf 7.1</span></div>
+        <div class="mentor-area-badge">🏥 HealthTech · Leadership Coaching</div>
+      </div>
+      <div class="mentor-rationale">McKinsey + 10 years mechanical engineering + 20 years coaching/management + 2 co-founded startups. HealthTech SaaS. General Management + 360. His McKinsey + engineering + founder experience creates a well-rounded profile for supporting Consilience Bio's leadership development as the company scales from a 5-founder team to a structured organization.</div>
+      <div class="tags-area">
+        <div class="tag-row"><span class="tag-row-label">Sector</span><span class="tag tag-sector">Health/Tech</span><span class="tag tag-sector">HealthTech SaaS</span></div>
+        <div class="tag-row"><span class="tag-row-label">Skills</span><span class="tag tag-skill">General Management</span><span class="tag tag-skill">360 Coaching</span><span class="tag tag-skill">McKinsey</span></div>
+        <div class="tag-row"><span class="tag-row-label">Geo</span><span class="tag tag-geo">Luxembourg</span></div>
+      </div>
+      <a href="https://www.linkedin.com/in/sergeborg/" target="_blank" class="linkedin-link">🔗 linkedin.com/in/sergeborg</a>
+    </div>
+
+    <!-- Daniel Lindegger -->
+    <div class="mentor-card qualified-card">
+      <div class="mentor-card-top">
+        <div class="mentor-header"><div class="mentor-avatar av-green">DL</div><div><div class="mentor-name">Daniel Lindegger</div><div class="mentor-location">📍 United Kingdom</div></div></div>
+        <div class="scores-row"><span class="score-pill score-dmf">DMF 7.2</span><span class="score-pill score-conf">Conf 7.0</span></div>
+        <div class="mentor-area-badge">🏥 Clinician-Scientist · BioScience</div>
+      </div>
+      <div class="mentor-rationale">Clinician-scientist (Ophthalmology). Postgraduate degrees in Bioscience Entrepreneurship and Advanced Therapeutics. HealthTech SaaS + MedTech. UK-based. His clinical + bioscience entrepreneurship background provides an end-user scientist perspective — critical for validating that Consilience Bio's platform UX and documentation actually work for the research scientists who will use it daily.</div>
+      <div class="tags-area">
+        <div class="tag-row"><span class="tag-row-label">Sector</span><span class="tag tag-sector">HealthTech</span><span class="tag tag-sector">MedTech</span><span class="tag tag-sector">Bioscience</span></div>
+        <div class="tag-row"><span class="tag-row-label">Skills</span><span class="tag tag-skill">Clinical Research</span><span class="tag tag-skill">BioScience Entrepreneurship</span></div>
+        <div class="tag-row"><span class="tag-row-label">Geo</span><span class="tag tag-geo">UK</span></div>
+      </div>
+      <a href="https://www.linkedin.com/in/daniel-josef-lindegger-ba9456156/" target="_blank" class="linkedin-link">🔗 linkedin.com/in/daniel-josef-lindegger</a>
+    </div>
+
+    <!-- Stepa Weyand -->
+    <div class="mentor-card qualified-card">
+      <div class="mentor-card-top">
+        <div class="mentor-header"><div class="mentor-avatar av-orange">SW</div><div><div class="mentor-name">Stepa Weyand</div><div class="mentor-location">📍 Frankfurt, Germany</div></div></div>
+        <div class="scores-row"><span class="score-pill score-dmf">DMF 7.2</span><span class="score-pill score-conf">Conf 7.0</span></div>
+        <div class="mentor-area-badge">🏥 HealthTech · General Management</div>
+      </div>
+      <div class="mentor-rationale">Health + General Management + Sustainability. HealthTech SaaS. Frankfurt-based (German pharma/life sciences hub). Strong interest in Inovexus model. Germany is a key European biotech market for Consilience Bio (unnamed German corporates cited as interested). His Frankfurt base in Germany's financial and pharma heartland provides natural channel access.</div>
+      <div class="tags-area">
+        <div class="tag-row"><span class="tag-row-label">Sector</span><span class="tag tag-sector">Health</span><span class="tag tag-sector">HealthTech SaaS</span></div>
+        <div class="tag-row"><span class="tag-row-label">Skills</span><span class="tag tag-skill">General Management</span><span class="tag tag-skill">Health Mgmt</span><span class="tag tag-skill">Sustainability</span></div>
+        <div class="tag-row"><span class="tag-row-label">Geo</span><span class="tag tag-geo">Germany</span></div>
+      </div>
+      <a href="https://www.linkedin.com/in/dr-stepa-weyand" target="_blank" class="linkedin-link">🔗 linkedin.com/in/dr-stepa-weyand</a>
+    </div>
+
+    <!-- Saman Hashemian -->
+    <div class="mentor-card qualified-card">
+      <div class="mentor-card-top">
+        <div class="mentor-header"><div class="mentor-avatar av-teal">SH</div><div><div class="mentor-name">Saman Hashemian</div><div class="mentor-location">📍 Munich, Germany</div></div></div>
+        <div class="scores-row"><span class="score-pill score-dmf">DMF 7.2</span><span class="score-pill score-conf">Conf 7.0</span></div>
+        <div class="mentor-area-badge">🏥 HealthTech Marketing · Ops</div>
+      </div>
+      <div class="mentor-rationale">Health + Marketing + Business Operations. HealthTech SaaS. Early-stage startup experience (fundraising, hiring, operations). Can handle everything up to 30-50 employees. Munich-based. His generalist operator experience in HealthTech (0-to-30 employees) is useful for Consilience Bio's current phase of team building and the operational infrastructure required to deliver on the aggressive ARR targets.</div>
+      <div class="tags-area">
+        <div class="tag-row"><span class="tag-row-label">Sector</span><span class="tag tag-sector">Health</span><span class="tag tag-sector">HealthTech SaaS</span></div>
+        <div class="tag-row"><span class="tag-row-label">Skills</span><span class="tag tag-skill">Marketing</span><span class="tag tag-skill">Business Ops</span><span class="tag tag-skill">Fundraising</span></div>
+        <div class="tag-row"><span class="tag-row-label">Geo</span><span class="tag tag-geo">Germany</span></div>
+      </div>
+      <a href="https://www.linkedin.com/in/saman-hashemian-0b559332/" target="_blank" class="linkedin-link">🔗 linkedin.com/in/saman-hashemian</a>
+    </div>
+
+    <!-- Claudia Stuckmann-Invernizzi -->
+    <div class="mentor-card qualified-card">
+      <div class="mentor-card-top">
+        <div class="mentor-header"><div class="mentor-avatar av-blue">CSI</div><div><div class="mentor-name">Claudia Stuckmann-Invernizzi</div><div class="mentor-location">📍 Brussels, Belgium</div></div></div>
+        <div class="scores-row"><span class="score-pill score-dmf">DMF 7.2</span><span class="score-pill score-conf">Conf 7.0</span></div>
+        <div class="mentor-area-badge">🏥 Biotech Regulation · Life Sciences Policy</div>
+      </div>
+      <div class="mentor-rationale">Experience across renewable energy, animal & plant health, agriculture, environment, chemical, biotechnology, and healthcare. Risk management, regulation, trade policy, business development. HealthTech SaaS. Brussels-based (EU policy hub). Her regulatory and trade policy expertise for the biotechnology sector is uniquely relevant for Consilience Bio as it navigates EU data governance and potential regulatory considerations for handling multi-omics clinical data.</div>
+      <div class="tags-area">
+        <div class="tag-row"><span class="tag-row-label">Sector</span><span class="tag tag-sector">BioTech</span><span class="tag tag-sector">Healthcare</span><span class="tag tag-sector">Regulation</span></div>
+        <div class="tag-row"><span class="tag-row-label">Skills</span><span class="tag tag-skill">Legal/Compliance</span><span class="tag tag-skill">Trade Policy</span><span class="tag tag-skill">Risk Mgmt</span></div>
+        <div class="tag-row"><span class="tag-row-label">Geo</span><span class="tag tag-geo">Belgium/EU</span></div>
+      </div>
+      <a href="https://www.linkedin.com/in/claudia-stuckmann-invernizzi" target="_blank" class="linkedin-link">🔗 linkedin.com/in/claudia-stuckmann-invernizzi</a>
+    </div>
+
+    <!-- Pietro Termini -->
+    <div class="mentor-card qualified-card">
+      <div class="mentor-card-top">
+        <div class="mentor-header"><div class="mentor-avatar av-green">PT</div><div><div class="mentor-name">Pietro Termini</div><div class="mentor-location">📍 Bologna, Italy</div></div></div>
+        <div class="scores-row"><span class="score-pill score-dmf">DMF 7.2</span><span class="score-pill score-conf">Conf 7.0</span></div>
+        <div class="mentor-area-badge">🏥 MedTech Data · Corporate Strategy</div>
+      </div>
+      <div class="mentor-rationale">PhD in tech. C-level experience in technology companies. MedTech classification. Corporate Strategy + Data + Business Operations expertise. His academic background combined with executive tech experience and MedTech sector knowledge positions him to advise on the scientific data platform strategy and product positioning for research-driven buyers.</div>
+      <div class="tags-area">
+        <div class="tag-row"><span class="tag-row-label">Sector</span><span class="tag tag-sector">Tech/Data</span><span class="tag tag-sector">MedTech</span></div>
+        <div class="tag-row"><span class="tag-row-label">Skills</span><span class="tag tag-skill">Corporate Strategy</span><span class="tag tag-skill">Data</span><span class="tag tag-skill">Business Operations</span></div>
+        <div class="tag-row"><span class="tag-row-label">Geo</span><span class="tag tag-geo">Italy</span></div>
+      </div>
+      <a href="https://www.linkedin.com/in/pietro-termini-2271b756" target="_blank" class="linkedin-link">🔗 linkedin.com/in/pietro-termini</a>
+    </div>
+
+    <!-- Vincent Dujardin -->
+    <div class="mentor-card qualified-card">
+      <div class="mentor-card-top">
+        <div class="mentor-header"><div class="mentor-avatar av-orange">VDu</div><div><div class="mentor-name">Vincent Dujardin</div><div class="mentor-location">📍 Waterloo, Belgium</div></div></div>
+        <div class="scores-row"><span class="score-pill score-dmf">DMF 7.2</span><span class="score-pill score-conf">Conf 7.0</span></div>
+        <div class="mentor-area-badge">🏥 BioTech · Manufacturing · DeepTech</div>
+      </div>
+      <div class="mentor-rationale">Manufacturing + BioTech & Pharma + DeepTech + Healthcare. Belgium. Active in Inovexus mentoring program. His manufacturing background in biotech/healthcare (relevant for understanding the industrial production context of Consilience Bio's pharma and cosmetics clients) and DeepTech classification provide a useful operational perspective for the platform's deployment in manufacturing-adjacent R&D workflows.</div>
+      <div class="tags-area">
+        <div class="tag-row"><span class="tag-row-label">Sector</span><span class="tag tag-sector">BioTech & Pharma</span><span class="tag tag-sector">Manufacturing</span><span class="tag tag-sector">DeepTech</span></div>
+        <div class="tag-row"><span class="tag-row-label">Skills</span><span class="tag tag-skill">Manufacturing</span><span class="tag tag-skill">DeepTech</span></div>
+        <div class="tag-row"><span class="tag-row-label">Geo</span><span class="tag tag-geo">Belgium</span></div>
+      </div>
+      <a href="https://www.linkedin.com/in/vincent-dujardin-28212613" target="_blank" class="linkedin-link">🔗 linkedin.com/in/vincent-dujardin</a>
+    </div>
+
+    <!-- Nicolas Hüe -->
+    <div class="mentor-card qualified-card">
+      <div class="mentor-card-top">
+        <div class="mentor-header"><div class="mentor-avatar av-purple">NH</div><div><div class="mentor-name">Nicolas Hüe</div><div class="mentor-location">📍 Paris, France</div></div></div>
+        <div class="scores-row"><span class="score-pill score-dmf">DMF 7.2</span><span class="score-pill score-conf">Conf 7.0</span></div>
+        <div class="mentor-area-badge">🧬 AI Business Development</div>
+      </div>
+      <div class="mentor-rationale">AI entrepreneur with multiple founded companies including an exited marketplace. Onboarded as mentor for AI. Business Development + AI skills. His experience commercializing AI products (including a successfully exited platform) is relevant for Consilience Bio's challenge of positioning a novel AI-native product to buyers who may not fully understand its value proposition.</div>
+      <div class="tags-area">
+        <div class="tag-row"><span class="tag-row-label">Sector</span><span class="tag tag-sector">AI</span><span class="tag tag-sector">Marketplace</span></div>
+        <div class="tag-row"><span class="tag-row-label">Skills</span><span class="tag tag-skill">Business Development</span><span class="tag tag-skill">AI</span><span class="tag tag-skill">Entrepreneurship</span></div>
+        <div class="tag-row"><span class="tag-row-label">Geo</span><span class="tag tag-geo">France</span></div>
+      </div>
+      <a href="https://www.linkedin.com/in/nicolas-h%C3%BCe-03571934" target="_blank" class="linkedin-link">🔗 linkedin.com/in/nicolas-hue</a>
+    </div>
+
+    <!-- Eric Ibled -->
+    <div class="mentor-card qualified-card">
+      <div class="mentor-card-top">
+        <div class="mentor-header"><div class="mentor-avatar av-red">EI</div><div><div class="mentor-name">Eric Ibled</div><div class="mentor-location">📍 France</div></div></div>
+        <div class="scores-row"><span class="score-pill score-dmf">DMF 7.0</span><span class="score-pill score-conf">Conf 6.8</span></div>
+        <div class="mentor-area-badge">🚀 Fundraising · VC · AI Finance</div>
+      </div>
+      <div class="mentor-rationale">Professional business angel in fintech, data/no-code, cybersecurity, and quantum computing. Fundraising + General Management. Finance/AI/VC. Hands-on investing approach with portfolio support. While not biotech-specific, his active angel portfolio in data/AI technologies and hands-on fundraising methodology provide transferable support for Consilience Bio's Series A investor targeting and pitch preparation.</div>
+      <div class="tags-area">
+        <div class="tag-row"><span class="tag-row-label">Sector</span><span class="tag tag-sector">Finance</span><span class="tag tag-sector">AI</span><span class="tag tag-sector">VC</span></div>
+        <div class="tag-row"><span class="tag-row-label">Skills</span><span class="tag tag-skill">Fundraising</span><span class="tag tag-skill">General Management</span><span class="tag tag-skill">Angel Investing</span></div>
+        <div class="tag-row"><span class="tag-row-label">Geo</span><span class="tag tag-geo">France</span></div>
+      </div>
+      <a href="https://www.linkedin.com/in/eric-ibled/" target="_blank" class="linkedin-link">🔗 linkedin.com/in/eric-ibled</a>
+    </div>
+
+    <!-- Tram Trinh -->
+    <div class="mentor-card qualified-card">
+      <div class="mentor-card-top">
+        <div class="mentor-header"><div class="mentor-avatar av-teal">TTr</div><div><div class="mentor-name">Tram Trinh</div><div class="mentor-location">📍 France</div></div></div>
+        <div class="scores-row"><span class="score-pill score-dmf">DMF 7.0</span><span class="score-pill score-conf">Conf 6.8</span></div>
+        <div class="mentor-area-badge">🏥 BioTech & Pharma · MedTech</div>
+      </div>
+      <div class="mentor-rationale">BioTech & Pharma + MedTech classification. Healthcare vertical (Marketplaces + Healthcare & BioTech). France-based. Her dual BioTech/Pharma and MedTech expertise provides a broad life sciences sector perspective useful for Consilience Bio's narrative construction across different buyer segments (biotech R&D teams vs. pharma regulatory/data teams).</div>
+      <div class="tags-area">
+        <div class="tag-row"><span class="tag-row-label">Sector</span><span class="tag tag-sector">BioTech & Pharma</span><span class="tag tag-sector">MedTech</span></div>
+        <div class="tag-row"><span class="tag-row-label">Skills</span><span class="tag tag-skill">BioTech Industry</span><span class="tag tag-skill">Healthcare</span></div>
+        <div class="tag-row"><span class="tag-row-label">Geo</span><span class="tag tag-geo">France</span></div>
+      </div>
+      <a href="https://linkedin.com/in/tramntrinh" target="_blank" class="linkedin-link">🔗 linkedin.com/in/tramntrinh</a>
+    </div>
+
+    <!-- Achilleas Kotrozos -->
+    <div class="mentor-card qualified-card">
+      <div class="mentor-card-top">
+        <div class="mentor-header"><div class="mentor-avatar av-blue">AK</div><div><div class="mentor-name">Achilleas Kotrozos</div><div class="mentor-location">📍 Turin, Italy</div></div></div>
+        <div class="scores-row"><span class="score-pill score-dmf">DMF 7.0</span><span class="score-pill score-conf">Conf 6.8</span></div>
+        <div class="mentor-area-badge">🏥 BioTech · Manufacturing · Italy</div>
+      </div>
+      <div class="mentor-rationale">Manufacturing + Energy + BioTech. BioTech & Pharma. Techstars connection. 10 investments, 10 alive. His BioTech & Pharma expertise combined with manufacturing and energy sector experience provides useful perspective for the industrial R&D context in which Consilience Bio's food/cosmetics corporate clients operate.</div>
+      <div class="tags-area">
+        <div class="tag-row"><span class="tag-row-label">Sector</span><span class="tag tag-sector">BioTech & Pharma</span><span class="tag tag-sector">Manufacturing</span></div>
+        <div class="tag-row"><span class="tag-row-label">Skills</span><span class="tag tag-skill">Angel Investing</span><span class="tag tag-skill">Techstars Network</span></div>
+        <div class="tag-row"><span class="tag-row-label">Geo</span><span class="tag tag-geo">Italy</span></div>
+      </div>
+      <a href="https://linkedin.com/in/achilleas-kotrozos-b4809617" target="_blank" class="linkedin-link">🔗 linkedin.com/in/achilleas-kotrozos</a>
+    </div>
+
+    <!-- Chris Holmes -->
+    <div class="mentor-card qualified-card">
+      <div class="mentor-card-top">
+        <div class="mentor-header"><div class="mentor-avatar av-green">CH</div><div><div class="mentor-name">Chris Holmes</div><div class="mentor-location">📍 Basel, Switzerland</div></div></div>
+        <div class="scores-row"><span class="score-pill score-dmf">DMF 7.0</span><span class="score-pill score-conf">Conf 6.8</span></div>
+        <div class="mentor-area-badge">🏥 Pharma Procurement · Novartis</div>
+      </div>
+      <div class="mentor-rationale">Novartis and Avantor procurement leadership. BioTech & Pharma. ProcurementTech and SupplyChainTech mentoring verticals. Innovation & supplier collaboration. His insider knowledge of how Novartis and large pharma companies evaluate and purchase external technology tools is directly relevant to Consilience Bio's enterprise sales process targeting pharma procurement and R&D budget holders.</div>
+      <div class="tags-area">
+        <div class="tag-row"><span class="tag-row-label">Sector</span><span class="tag tag-sector">BioTech & Pharma</span><span class="tag tag-sector">ProcurementTech</span></div>
+        <div class="tag-row"><span class="tag-row-label">Skills</span><span class="tag tag-skill">Procurement Strategy</span><span class="tag tag-skill">Pharma Buyer</span><span class="tag tag-skill">Innovation</span></div>
+        <div class="tag-row"><span class="tag-row-label">Geo</span><span class="tag tag-geo">Switzerland</span></div>
+      </div>
+      <a href="https://www.linkedin.com/in/cholmesie" target="_blank" class="linkedin-link">🔗 linkedin.com/in/cholmesie</a>
+    </div>
+
+    <!-- François Blum -->
+    <div class="mentor-card qualified-card">
+      <div class="mentor-card-top">
+        <div class="mentor-header"><div class="mentor-avatar av-orange">FB</div><div><div class="mentor-name">François Blum</div><div class="mentor-location">📍 Paris, France</div></div></div>
+        <div class="scores-row"><span class="score-pill score-dmf">DMF 7.0</span><span class="score-pill score-conf">Conf 6.8</span></div>
+        <div class="mentor-area-badge">🏥 Food/MedTech — Legal · IP · Marketing</div>
+      </div>
+      <div class="mentor-rationale">Mentored in MedTech and PropTech. Seafood startup founder (€4M pre-seed). Climate tech investor (6 deals). IP/legal expertise (Paris mentor network founder). Food + media experience with SaaS/B2B credentials. His MedTech mentoring experience and IP legal background (highly relevant for protecting Consilience's synthetic data models and foundation model IP) make him a useful complement to Franck Tetaz on IP strategy.</div>
+      <div class="tags-area">
+        <div class="tag-row"><span class="tag-row-label">Sector</span><span class="tag tag-sector">Food</span><span class="tag tag-sector">MedTech</span><span class="tag tag-sector">Climate</span></div>
+        <div class="tag-row"><span class="tag-row-label">Skills</span><span class="tag tag-skill">Legal/IP</span><span class="tag tag-skill">Marketing</span><span class="tag tag-skill">Fundraising</span><span class="tag tag-skill">B2B SaaS</span></div>
+        <div class="tag-row"><span class="tag-row-label">Geo</span><span class="tag tag-geo">France</span></div>
+      </div>
+      <a href="https://www.linkedin.com/in/francoisblum/" target="_blank" class="linkedin-link">🔗 linkedin.com/in/francoisblum</a>
+    </div>
+
+    <!-- Pablo Pacca -->
+    <div class="mentor-card qualified-card">
+      <div class="mentor-card-top">
+        <div class="mentor-header"><div class="mentor-avatar av-red">PP</div><div><div class="mentor-name">Pablo Pacca</div><div class="mentor-location">📍 Germany</div></div></div>
+        <div class="scores-row"><span class="score-pill score-dmf">DMF 7.0</span><span class="score-pill score-conf">Conf 6.8</span></div>
+        <div class="mentor-area-badge">🏥 Health · DeepTech — MedTech</div>
+      </div>
+      <div class="mentor-rationale">Health + DeepTech + MedTech. Germany-based. His health and deeptech focus in the German market provides access to the German corporate biotech/medtech ecosystem that Consilience Bio identifies as an interested prospect (unnamed German corporates). German market entry for enterprise SaaS in the life sciences vertical is a specific knowledge need.</div>
+      <div class="tags-area">
+        <div class="tag-row"><span class="tag-row-label">Sector</span><span class="tag tag-sector">Health</span><span class="tag tag-sector">MedTech</span><span class="tag tag-sector">DeepTech</span></div>
+        <div class="tag-row"><span class="tag-row-label">Skills</span><span class="tag tag-skill">Health Industry</span><span class="tag tag-skill">DeepTech</span></div>
+        <div class="tag-row"><span class="tag-row-label">Geo</span><span class="tag tag-geo">Germany</span></div>
+      </div>
+      <a href="https://de.linkedin.com/in/paccapablo" target="_blank" class="linkedin-link">🔗 linkedin.com/in/paccapablo</a>
+    </div>
+
+    <!-- Natalie Folge -->
+    <div class="mentor-card qualified-card">
+      <div class="mentor-card-top">
+        <div class="mentor-header"><div class="mentor-avatar av-teal">NF</div><div><div class="mentor-name">Natalie Folge</div><div class="mentor-location">📍 Norway</div></div></div>
+        <div class="scores-row"><span class="score-pill score-dmf">DMF 7.0</span><span class="score-pill score-conf">Conf 6.8</span></div>
+        <div class="mentor-area-badge">🏥 MedTech · Digital Transformation</div>
+      </div>
+      <div class="mentor-rationale">MedTech classification. 9 years at Telenor (15 markets, tech lead). UBS finance. E-commerce subscription expertise. Angel investor in female-focused network. Her digital transformation expertise at large corporations (Telenor) and MedTech sector knowledge are relevant for understanding Consilience Bio's enterprise digital transformation sales motion to R&D-heavy pharma/biotech organizations.</div>
+      <div class="tags-area">
+        <div class="tag-row"><span class="tag-row-label">Sector</span><span class="tag tag-sector">MedTech</span><span class="tag tag-sector">Telecom</span><span class="tag tag-sector">Retail</span></div>
+        <div class="tag-row"><span class="tag-row-label">Skills</span><span class="tag tag-skill">Strategy</span><span class="tag tag-skill">Digital Transformation</span><span class="tag tag-skill">Business Development</span></div>
+        <div class="tag-row"><span class="tag-row-label">Geo</span><span class="tag tag-geo">Norway</span></div>
+      </div>
+      <a href="https://www.linkedin.com/in/natalie-grewe-folge-242318" target="_blank" class="linkedin-link">🔗 linkedin.com/in/natalie-grewe-folge</a>
+    </div>
+
+    <!-- Joris Jeelof -->
+    <div class="mentor-card qualified-card">
+      <div class="mentor-card-top">
+        <div class="mentor-header"><div class="mentor-avatar av-blue">JJe</div><div><div class="mentor-name">Joris Jeelof</div><div class="mentor-location">📍 Netherlands</div></div></div>
+        <div class="scores-row"><span class="score-pill score-dmf">DMF 7.0</span><span class="score-pill score-conf">Conf 6.8</span></div>
+        <div class="mentor-area-badge">🏥 MedTech · Manufacturing Software</div>
+      </div>
+      <div class="mentor-rationale">Manufacturing + Software + MedTech classification. Netherlands-based. His combination of manufacturing industry knowledge and software expertise in the MedTech sector provides an operational perspective on how large medical device manufacturers evaluate and integrate new software tools into their R&D workflows — relevant for Consilience Bio's targeting of medical/pharma manufacturing R&D teams.</div>
+      <div class="tags-area">
+        <div class="tag-row"><span class="tag-row-label">Sector</span><span class="tag tag-sector">MedTech</span><span class="tag tag-sector">Manufacturing</span><span class="tag tag-sector">Software</span></div>
+        <div class="tag-row"><span class="tag-row-label">Skills</span><span class="tag tag-skill">Manufacturing Ops</span><span class="tag tag-skill">Software</span></div>
+        <div class="tag-row"><span class="tag-row-label">Geo</span><span class="tag tag-geo">Netherlands</span></div>
+      </div>
+      <a href="https://www.linkedin.com/in/joris-louwrens" target="_blank" class="linkedin-link">🔗 linkedin.com/in/joris-louwrens</a>
+    </div>
+
+    <!-- Anne Mérienne -->
+    <div class="mentor-card qualified-card">
+      <div class="mentor-card-top">
+        <div class="mentor-header"><div class="mentor-avatar av-green">AMe</div><div><div class="mentor-name">Anne Mérienne</div><div class="mentor-location">📍 Paris, France</div></div></div>
+        <div class="scores-row"><span class="score-pill score-dmf">DMF 7.0</span><span class="score-pill score-conf">Conf 6.8</span></div>
+        <div class="mentor-area-badge">🏥 BioTech — Retail/Human Assessment</div>
+      </div>
+      <div class="mentor-rationale">Retail + BioTech. BioTech & Pharma. France-based. HR/people assessment specialist. Her BioTech sector knowledge combined with HR/organizational assessment expertise is useful for the team-building phase that Consilience Bio is entering (planning multiple French hires for September 2026 onboarding across technical and commercial roles).</div>
+      <div class="tags-area">
+        <div class="tag-row"><span class="tag-row-label">Sector</span><span class="tag tag-sector">BioTech & Pharma</span><span class="tag tag-sector">Retail</span></div>
+        <div class="tag-row"><span class="tag-row-label">Skills</span><span class="tag tag-skill">HR/People Assessment</span><span class="tag tag-skill">BioTech Industry</span></div>
+        <div class="tag-row"><span class="tag-row-label">Geo</span><span class="tag tag-geo">France</span></div>
+      </div>
+      <a href="https://www.linkedin.com/in/anne-m%C3%A9rienne-3458327/" target="_blank" class="linkedin-link">🔗 linkedin.com/in/anne-merienne</a>
+    </div>
+
+    <!-- Borislav Kiprin -->
+    <div class="mentor-card qualified-card">
+      <div class="mentor-card-top">
+        <div class="mentor-header"><div class="mentor-avatar av-orange">BK</div><div><div class="mentor-name">Borislav Kiprin</div><div class="mentor-location">📍 Munich, Germany</div></div></div>
+        <div class="scores-row"><span class="score-pill score-dmf">DMF 7.2</span><span class="score-pill score-conf">Conf 7.0</span></div>
+        <div class="mentor-area-badge">🏥 HealthTech · B2B SaaS Marketing</div>
+      </div>
+      <div class="mentor-rationale">Cyber Security + Health + Marketing + Software. B2B + Data + KPI Definition + SaaS skills. HealthTech SaaS. His digital marketing expertise for B2B SaaS in the health sector is useful for Consilience Bio's content marketing and thought leadership strategy — a critical credibility builder for a technical audience of bioinformaticians and data scientists who evaluate platforms based on published content and community presence.</div>
+      <div class="tags-area">
+        <div class="tag-row"><span class="tag-row-label">Sector</span><span class="tag tag-sector">HealthTech SaaS</span><span class="tag tag-sector">Cybersecurity</span></div>
+        <div class="tag-row"><span class="tag-row-label">Skills</span><span class="tag tag-skill">B2B Marketing</span><span class="tag tag-skill">SaaS</span><span class="tag tag-skill">KPI Definition</span><span class="tag tag-skill">Data</span></div>
+        <div class="tag-row"><span class="tag-row-label">Geo</span><span class="tag tag-geo">Germany</span></div>
+      </div>
+      <a href="https://www.linkedin.com/in/borislavkiprin/" target="_blank" class="linkedin-link">🔗 linkedin.com/in/borislavkiprin</a>
+    </div>
+
+    <!-- Laurent Massuyeau -->
+    <div class="mentor-card qualified-card">
+      <div class="mentor-card-top">
+        <div class="mentor-header"><div class="mentor-avatar av-teal">LM</div><div><div class="mentor-name">Laurent Massuyeau</div><div class="mentor-location">📍 Geneva, Switzerland</div></div></div>
+        <div class="scores-row"><span class="score-pill score-dmf">DMF 7.8</span><span class="score-pill score-conf">Conf 7.6</span></div>
+        <div class="mentor-area-badge">🏥 BioTech & Pharma · FoodTech · Healthcare</div>
+      </div>
+      <div class="mentor-rationale">BioTech & Pharma primary classification with Healthcare & BioTech and FoodTech & AgriTech verticals — a rare trifecta directly mapping to Consilience Bio's three core market segments (pharma, food/microbiome, and healthcare). Geneva-based (European pharma and biotech capital — Novartis, Roche HQ territory), providing strong access to Swiss and European pharma decision-makers critical for Consilience Bio's enterprise sales pipeline.</div>
+      <div class="tags-area">
+        <div class="tag-row"><span class="tag-row-label">Sector</span><span class="tag tag-sector">BioTech & Pharma</span><span class="tag tag-sector">Healthcare & BioTech</span><span class="tag tag-sector">FoodTech & AgriTech</span></div>
+        <div class="tag-row"><span class="tag-row-label">Skills</span><span class="tag tag-skill">BioTech Industry</span><span class="tag tag-skill">Pharma Network</span><span class="tag tag-skill">Healthcare Strategy</span></div>
+        <div class="tag-row"><span class="tag-row-label">Geo</span><span class="tag tag-geo">Switzerland</span><span class="tag tag-geo">Europe</span></div>
+      </div>
+      <a href="https://www.linkedin.com/in/laurent-massuyeau-330646" target="_blank" class="linkedin-link">🔗 linkedin.com/in/laurent-massuyeau-330646</a>
+    </div>
+
+    <!-- Frédéric Herlin -->
+    <div class="mentor-card qualified-card">
+      <div class="mentor-card-top">
+        <div class="mentor-header"><div class="mentor-avatar av-orange">FH</div><div><div class="mentor-name">Frédéric Herlin</div><div class="mentor-location">📍 France</div></div></div>
+        <div class="scores-row"><span class="score-pill score-dmf">DMF 7.5</span><span class="score-pill score-conf">Conf 7.3</span></div>
+        <div class="mentor-area-badge">🏥 BioTech & Pharma · Retail Health</div>
+      </div>
+      <div class="mentor-rationale">Retail + Health industry expertise with BioTech & Pharma classification. CEO of Blissim (subscription-based beauty/cosmetics platform) — giving him intimate knowledge of cosmetics corporate buyer dynamics directly relevant to Consilience Bio's L'Oréal and cosmetics design-partner relationships. His combination of subscription SaaS business model experience and BioTech/Pharma proximity makes him a valuable sounding board for Consilience's ACV pricing and renewal strategy with cosmetics/FMCG clients.</div>
+      <div class="tags-area">
+        <div class="tag-row"><span class="tag-row-label">Sector</span><span class="tag tag-sector">BioTech & Pharma</span><span class="tag tag-sector">Retail</span><span class="tag tag-sector">Health/Beauty</span></div>
+        <div class="tag-row"><span class="tag-row-label">Skills</span><span class="tag tag-skill">Subscription SaaS</span><span class="tag tag-skill">Cosmetics Industry</span><span class="tag tag-skill">Business Operations</span></div>
+        <div class="tag-row"><span class="tag-row-label">Geo</span><span class="tag tag-geo">France</span></div>
+      </div>
+      <a href="https://www.linkedin.com/in/fredericherlin" target="_blank" class="linkedin-link">🔗 linkedin.com/in/fredericherlin</a>
+    </div>
+
+  </div>
+</section>
+
+<!-- DASHBOARD -->
+<section id="dashboard" class="dashboard-section">
+  <div class="section-header">
+    <div class="section-tag">Analytics</div>
+    <h2>📊 Visual Dashboard</h2>
+    <p>All charts reflect Top + Qualified mentor distribution. 505 profiles scored. 59 mentors at DMF ≥ 7.0.</p>
+  </div>
+
+  <div class="charts-grid">
+
+    <!-- Score Distribution -->
+    <div class="chart-card">
+      <div class="chart-title">Score Distribution Histogram</div>
+      <canvas id="scoreHistogram"></canvas>
+    </div>
+
+    <!-- Confidence Level Distribution -->
+    <div class="chart-card">
+      <div class="chart-title">Confidence Level Distribution</div>
+      <canvas id="confidenceBar"></canvas>
+    </div>
+
+    <!-- Geographic Distribution -->
+    <div class="chart-card">
+      <div class="chart-title">Geographic Distribution</div>
+      <canvas id="geoChart"></canvas>
+    </div>
+
+    <!-- Sector Expertise Distribution -->
+    <div class="chart-card">
+      <div class="chart-title">Sector Expertise Distribution</div>
+      <canvas id="sectorChart"></canvas>
+    </div>
+
+    <!-- Mentoring Skill Distribution -->
+    <div class="chart-card">
+      <div class="chart-title">Mentoring Skill Distribution</div>
+      <canvas id="skillChart"></canvas>
+    </div>
+
+    <!-- Primary Mentoring Area Distribution -->
+    <div class="chart-card">
+      <div class="chart-title">Primary Mentoring Area Assignment</div>
+      <canvas id="areaChart"></canvas>
+    </div>
+
+    <!-- Global Confidence Benchmark - WIDE -->
+    <div class="chart-card chart-wide">
+      <div class="chart-title">Global Confidence Score — Benchmark Comparison (Inovexus Portfolio)</div>
+      <canvas id="benchmarkChart" style="max-height:320px"></canvas>
+    </div>
+
+  </div>
+</section>
+
+<footer>
+  <div class="footer-brand">Inovexus</div>
+  <div class="footer-info">Consilience Bio · Mentor Matching Report · April 29, 2026 · 505 Profiles Evaluated · 59 Qualified Matches · Global Confidence: 78/100</div>
+</footer>
+
+</div>
+
+<script>
+const teal = '#4dd0c4';
+const blue = '#29b6f6';
+const orange = '#ffb300';
+const green = '#66bb6a';
+const red = '#ef5350';
+const purple = '#ab47bc';
+const grey = '#90a4ae';
+
+Chart.defaults.font.family = "'DM Sans', sans-serif";
+Chart.defaults.font.size = 12;
+Chart.defaults.color = '#546e8a';
+
+// 1. Score Distribution Histogram
+new Chart(document.getElementById('scoreHistogram'), {
+  type: 'bar',
+  data: {
+    labels: ['7.0–7.2','7.3–7.5','7.6–7.9','8.0–8.4','8.5–8.9','9.0+'],
+    datasets: [{
+      label: 'Mentors',
+      data: [21, 14, 8, 9, 6, 1],
+      backgroundColor: [grey, grey, blue, blue, orange, '#ffd700'],
+      borderRadius: 6
+    }]
+  },
+  options: {
+    plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ctx.raw + ' mentors' } } },
+    scales: { y: { beginAtZero: true, ticks: { stepSize: 2 } } }
+  }
+});
+
+// 2. Confidence Level Distribution
+new Chart(document.getElementById('confidenceBar'), {
+  type: 'bar',
+  data: {
+    labels: ['Elite\n(≥8.5)','High\n(8.0–8.4)','Strong\n(7.5–7.9)','Qualified\n(7.0–7.4)'],
+    datasets: [{
+      label: 'Mentors',
+      data: [10, 9, 14, 26],
+      backgroundColor: ['#ffd700', orange, teal, blue],
+      borderRadius: 6
+    }]
+  },
+  options: {
+    indexAxis: 'y',
+    plugins: { legend: { display: false } },
+    scales: { x: { beginAtZero: true } }
+  }
+});
+
+// 3. Geographic Distribution
+new Chart(document.getElementById('geoChart'), {
+  type: 'doughnut',
+  data: {
+    labels: ['France','Germany','UK/Ireland','USA','Italy','Others EU','Nordics'],
+    datasets: [{
+      data: [18, 8, 4, 5, 6, 9, 7],
+      backgroundColor: [blue, teal, purple, orange, green, grey, red],
+      borderWidth: 2,
+      borderColor: '#fff'
+    }]
+  },
+  options: {
+    plugins: { legend: { position: 'right', labels: { boxWidth: 12 } } },
+    cutout: '55%'
+  }
+});
+
+// 4. Sector Expertise Distribution
+new Chart(document.getElementById('sectorChart'), {
+  type: 'bar',
+  data: {
+    labels: ['BioTech & Pharma','HealthTech SaaS','MedTech','AI/Data','FoodTech/Agri','Life Sciences Tools','Cosmetics/FMCG'],
+    datasets: [{
+      label: 'Mentors',
+      data: [24, 18, 10, 12, 9, 5, 5],
+      backgroundColor: [teal, blue, purple, orange, green, red, grey],
+      borderRadius: 6
+    }]
+  },
+  options: {
+    indexAxis: 'y',
+    plugins: { legend: { display: false } },
+    scales: { x: { beginAtZero: true } }
+  }
+});
+
+// 5. Mentoring Skill Distribution
+new Chart(document.getElementById('skillChart'), {
+  type: 'bar',
+  data: {
+    labels: ['Enterprise Sales/GTM','Strategic Partnerships','AI/Product Dev','Fundraising/VC','Finance/M&A','IP/Legal/Compliance','HR/Team Building'],
+    datasets: [{
+      label: 'Mentors',
+      data: [19, 12, 14, 10, 8, 5, 4],
+      backgroundColor: [orange, teal, blue, green, purple, red, grey],
+      borderRadius: 6
+    }]
+  },
+  options: {
+    plugins: { legend: { display: false } },
+    scales: { y: { beginAtZero: true } }
+  }
+});
+
+// 6. Primary Mentoring Area
+new Chart(document.getElementById('areaChart'), {
+  type: 'doughnut',
+  data: {
+    labels: ['Enterprise Sales & GTM — Life Sciences','Product Dev — AI/Data SaaS','Strategic Partnerships & Series A'],
+    datasets: [{
+      data: [25, 16, 18],
+      backgroundColor: [orange, teal, blue],
+      borderWidth: 3,
+      borderColor: '#fff'
+    }]
+  },
+  options: {
+    plugins: { legend: { position: 'bottom', labels: { boxWidth: 14 } } },
+    cutout: '50%'
+  }
+});
+
+// 7. Global Confidence Benchmark Chart
+const startups = [
+  { name: 'Pilea', score: 9.5, current: false },
+  { name: 'Flumes', score: 8.8, current: false },
+  { name: 'Lemrock', score: 8.5, current: false },
+  { name: 'OnSource', score: 8.5, current: false },
+  { name: 'Kinvault', score: 8.5, current: false },
+  { name: 'Owuba', score: 8.4, current: false },
+  { name: 'Consilience Bio 🧬', score: 7.8, current: true },
+  { name: 'Saveria', score: 7.8, current: false },
+  { name: 'Nerva', score: 7.6, current: false },
+  { name: 'Lili For Life', score: 8.2, current: false },
+  { name: 'Intelligent Core', score: 8.2, current: false },
+  { name: 'Blumana', score: 7.0, current: false },
+  { name: 'Glober AI', score: 6.9, current: false }
+].sort((a, b) => b.score - a.score);
+
+new Chart(document.getElementById('benchmarkChart'), {
+  type: 'bar',
+  data: {
+    labels: startups.map(s => s.name),
+    datasets: [{
+      label: 'Global Confidence Score (0–10)',
+      data: startups.map(s => s.score),
+      backgroundColor: startups.map(s => s.current ? '#4dd0c4' : '#90a4ae'),
+      borderColor: startups.map(s => s.current ? '#00897b' : '#78909c'),
+      borderWidth: 2,
+      borderRadius: 6
+    }]
+  },
+  options: {
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        callbacks: {
+          label: ctx => {
+            const isCurrenty = startups[ctx.dataIndex].current;
+            return ` ${ctx.raw}/10${isCurrenty ? ' ← Current Startup' : ''}`;
+          }
+        }
+      },
+      annotation: {}
+    },
+    scales: {
+      y: { min: 6, max: 10, ticks: { stepSize: 0.5 }, title: { display: true, text: 'Score (0–10)' } }
+    }
+  }
+});
+</script>
+</body>
+</html>
